@@ -18,15 +18,37 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app requires access to your location for certain features to work."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
-    },
-    "web": {
+      },
+      "package": "com.pixelweb.agilenvio",
+      "versionCode": 1,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s"
+        }
+        },
+        "permissions": [
+            "ACCESS_BACKGROUND_LOCATION",
+            "ACCESS_COARSE_LOCATION",
+            "ACCESS_FINE_LOCATION",
+            "FOREGROUND_SERVICE",
+            "INTERNET",
+            "INSTANT_APP_FOREGROUND_SERVICE",
+            "LOCATION_HARDWARE",
+            "MANAGE_MEDIA",
+            "ACCESS_NETWORK_STATE",
+            "CAMERA"
+        ]        
+     },
+     "web": {
       "favicon": "./assets/favicon.png"
     }
   }
