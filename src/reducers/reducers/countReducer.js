@@ -19,7 +19,8 @@ const initialState = {
     offers:[],
     requisitionListPending:[],
     locations:[],
-    requisitionNegotiate:null
+    requisitionNegotiate:null,
+    locationDriver:null
   };
    
   export default (state = initialState, action) => {
@@ -105,6 +106,9 @@ const initialState = {
           let origTmp5 = {...state, requisitionNegotiate: action.payload};
           console.log("nueva tarifa ",origTmp5.requisitionNegotiate)
           return origTmp5;
+        case 'SET_DRIVER_LOCATION':
+          let origTmp6 = {...state, locationDriver: action.payload};
+          return origTmp6
         default:
           return state;
     }

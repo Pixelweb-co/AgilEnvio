@@ -29,6 +29,7 @@ import {
   changeAppMode,
   setDriverList,
   setValorSol,
+  changeDriverPos
 } from "../reducers/actions/RequsitionActions";
 
 import { Provider } from "react-redux";
@@ -75,6 +76,11 @@ const AppNavigator = ({ store }) => {
   const setReduxOffers = (offers) => {
     dispatch(setOffers(offers));
   };
+
+const setLocationDriver = (location)=>{
+
+  dispatch(changeDriverPos(location))
+}
 
   const setSolicitud = (solicitud, offers) => {
     dispatch(setRequisition(solicitud));
@@ -258,7 +264,14 @@ console.log("trayendo sol nueva ",storedCredentials.tipo)
         
       })
 
- 
+      if(storedCredentials.tipo === 'cliente'){
+        socket.on("locationDriverLoad",(location,socketId)=>{
+        console.log("location recive driver",location)
+        if(location){  
+        setLocationDriver(location)
+        }  
+      })
+      }
 
         socket.on("notification", (notification, socketId) => {
           if (notification.type == "driverOfferSend") {

@@ -106,6 +106,7 @@ export default function RequisitionActive({ requisition, offers, socket }) {
               <MapComponent
                 type="viewDriver"
                 requisitionSelected={requsitionSl}
+                socket={socket}
               />
               {requsitionSl.status === "PENDING" && (
                 <View

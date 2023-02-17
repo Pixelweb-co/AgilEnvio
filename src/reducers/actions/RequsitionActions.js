@@ -104,3 +104,12 @@ export const changeOrigin = (origin) => {
       payload:requisition
     };
   }; 
+
+  export const changeDriverPos = (Remotelocation) => {
+   return {
+      type: 'SET_DRIVER_LOCATION',
+      payload:Remotelocation
+    };
+  };
+
+  
