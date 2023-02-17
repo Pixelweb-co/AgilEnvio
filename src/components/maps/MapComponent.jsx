@@ -37,13 +37,13 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
     setInterval(()=>{
       obtenerUbicacion();
 
-    },20000)
+    },15000)
 
   }, []);
 
   useEffect(()=>{
 
-    if(locationDriver!==null && requisition.origin.coords){
+    if(locationDriver!==null && Appmode === "client" && requisition.origin.coords){
     //calcular segun paso distancia de la ubicacion de el driver y el origen de la solicitud
     const distance = getDistance(requisition.origin.coords.latitude,requisition.origin.coords.longitude,locationDriver.latitude,locationDriver.longitude)
     
@@ -81,11 +81,11 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
 
       //updateCameraHeading();
      if(Appmode === 'driver' && requisition.status === 'Abierta'){
-      console.log("Enviando ubicacion driver", region);
+     // console.log("Enviando ubicacion driver", region);
     
-      
+      if(socket){
       socket.emit('locationDriverSend', {location:region,requisition:requisition}); 
-     
+      }
     }
     
     }

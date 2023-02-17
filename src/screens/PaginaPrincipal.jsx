@@ -13,7 +13,7 @@ const PaginaPrincipal = ({
   navigation,
 }) => {
   useEffect(() => {
-   console.log("change requisition ",requisition)
+   //console.log("change requisition ",requisition)
     
   }, [requisition]);
 

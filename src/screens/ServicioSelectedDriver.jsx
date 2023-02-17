@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text,StyleSheet,TouchableOpacity,Dimensions } from 'react-native';
 import MapComponent from '../components/maps/MapComponent';
-import DestinationsRequisition from '../components/requisitions/driver/DestinationsRequisition'
+import DestinationsRequisition from '../components/requisitions/DestinationsRequisition'
 import NegotiateRequisition from '../components/requisitions/driver/NegotiateRequisition';
 
 import {useSelector} from 'react-redux'

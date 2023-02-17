@@ -1,7 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text,Image } from 'react-native';
+import { useSelector } from 'react-redux';
 
-export default function UserBox({requisition,user,offer}) {
+
+
+export default function UserBox({requisition}) {
+  const AppMode = useSelector((state) => state.reducers.appMode);  
+  const [userData,setUserData]=useState(null) 
+
+  useEffect(()=>{
+    
+    const getUser = async (requisition) => {
+
+     
+        console.log("get user state")
+        let postData = {type:AppMode,user_id:null}
+
+      if(AppMode==='driver'){
+        postData.user_id = requisition.id_client
+      }
+
+      if(AppMode==='client'){
+        postData.user_id = requisition.id_driver
+      }
+
+
+// Send load user from API endpoint
+      const endpoint = 'http://api.agilenvio.co:2042/api/getuser';
+      
+      fetch(endpoint, {
+        method: 'POST',
+        body: JSON.stringify(postData),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        setUserData(data)
+      })
+      .catch(error => console.error(error));
+
+
+
+    }
+
+    getUser(requisition)
+    
+
+  },[])
+  
+  
+  
   return (
     <View
     
@@ -38,7 +88,7 @@ export default function UserBox({requisition,user,offer}) {
           alignItems: "center",
         }}
       >
-        <Text>Nombres</Text>
+        <Text>{AppMode==='driver' ? ("Cliente"):("Conductor")} : {userData && userData.nombres}</Text>
       </View>
 
       {/* Fila 2 */}
@@ -50,7 +100,7 @@ export default function UserBox({requisition,user,offer}) {
         }}
       >
         <Text>
-          <Text>$0</Text>
+          <Text>Tel: {userData && userData.telefono}</Text>
         </Text>
       </View>
     </View>

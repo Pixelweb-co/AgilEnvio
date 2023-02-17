@@ -266,7 +266,7 @@ console.log("trayendo sol nueva ",storedCredentials.tipo)
 
       if(storedCredentials.tipo === 'cliente'){
         socket.on("locationDriverLoad",(location,socketId)=>{
-        console.log("location recive driver",location)
+        //console.log("location recive driver",location)
         if(location){  
         setLocationDriver(location)
         }  

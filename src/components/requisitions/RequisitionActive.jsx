@@ -26,7 +26,7 @@ import {
 } from "../../reducers/actions/RequsitionActions";
 
 import MapComponent from "../maps/MapComponent";
-import DestinationsRequisition from "./driver/DestinationsRequisition";
+import DestinationsRequisition from "./DestinationsRequisition";
 import NegotiateRequisitionClient from "./client/NegotiateRequisitionClient";
 
 import { useSelector,useDispatch } from "react-redux";
@@ -240,7 +240,7 @@ export default function RequisitionActive({ requisition, offers, socket }) {
             }
 
             {requsitionSl.status === 'Abierta' &&
-            <UserBox/>
+            <UserBox requisition={requsitionSl}/>
             }
 
               <View style={styles.container}>
