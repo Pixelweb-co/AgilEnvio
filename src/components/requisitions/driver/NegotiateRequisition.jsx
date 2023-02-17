@@ -36,7 +36,7 @@ const NegotiateRequisition = ({ requisition, driver,socket }) => {
   }, []);
 
   const ofrecerTarfifa = async ()=>{
-console.log("ofrecer tarifa ",storedCredentials)
+    //console.log("ofrecer tarifa ",storedCredentials)
     
   socket.emit("setOffer",{
       valor: ValorOfecido,
