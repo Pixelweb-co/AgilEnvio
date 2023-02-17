@@ -41,7 +41,8 @@ const LocationServiceList = ({ navigation,socket }) => {
         
       navigation.navigate("Servicio", {
         requisition: selectedRequisition,
-        socket:socket
+        socket:socket,
+        navigationExt:navigation 
       });
     }
   }, [selectedRequisition]);

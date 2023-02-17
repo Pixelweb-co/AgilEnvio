@@ -16,10 +16,20 @@ export default function ServicioSelectedDriver(props) {
     
     const [socket,setSocket]=useState(null)
     const requisitionNegotiate = useSelector(state => state.reducers.requisitionNegotiate)
+    const requisition = useSelector(state => state.reducers.requisition)
 
 
     useEffect(()=>{
-                
+
+      console.log("requsition active ? ",props.route.params.requisition)
+      if(requisition.status==='Abierta'){
+        props.route.params.navigationExt.navigate("Principal")
+      }
+
+    },[requisition])
+
+    useEffect(()=>{
+        console.log("change req status ",props.route.params.requisition.status)            
         if(requisitionNegotiate===null){
                 console.log("neg empty")
             setRequisition(props.route.params.requisition)
@@ -33,6 +43,9 @@ export default function ServicioSelectedDriver(props) {
 
         
     },[props.route.params.requisition,requisitionNegotiate])
+
+
+
 
   return (
     <>

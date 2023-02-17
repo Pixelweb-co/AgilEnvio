@@ -64,10 +64,11 @@ function Menu({ navigation }) {
 }
 
 const Drawer = createDrawerNavigator();
-
+ 
 const AppNavigator = ({ store }) => {
   const [storedCredentials, setStoredCredentials] = useState(null);
   const [socket, setSocket] = useState(null);
+  const [screenDefault, setScreenDefault] = useState("Principal")
 
   const dispatch = useDispatch();
 
@@ -140,7 +141,7 @@ const AppNavigator = ({ store }) => {
         socket.emit("solicitudPendiente", storedCredentials);
 
         socket.on("seTsolicitud", function (sol, socketId) {
-          //  console.log("solicitud pendiente from socket : "+storedCredentials.tipo, sol);
+       //     console.log("solicitud pendiente from socket : "+storedCredentials.tipo, sol);
 
           if (
             (sol.sol.status === "Abierta" || sol.sol.status === "PENDING") &&
@@ -153,15 +154,28 @@ const AppNavigator = ({ store }) => {
             });
           }
 
+          if (
+            (sol.sol.status === "Abierta" ) &&
+            storedCredentials.tipo === "contratista"
+          ) {
+            //        console.log("solicitudes pendientes cliente join ")
+            socket.emit("joinRequisition", {
+              requisitionId: sol.sol._id,
+              contratista: storedCredentials._id,
+            });
+          }
+        //  console.log("sol antes "+storedCredentials.tipo,sol.sol)
           setSolicitud(sol.sol);
 
           //console.log("ofertas ",sol.offers)
           setReduxOffers(sol.offers);
+
+          
         });
 
         socket.on("solicitudes_abiertas", function (solicitudes, socketId) {
           if (store.appMode === "driver") {
-            //console.log("soles sockets "+store.appMode,solicitudes)
+            console.log("soles sockets "+store.appMode,solicitudes)
             setDriverListServices(solicitudes);
           }
         });
@@ -192,7 +206,7 @@ const AppNavigator = ({ store }) => {
 
       socket.on("offerAccept",function(data,socketId){
         
-        console.log("ofertaAceptada ",storedCredentials.tipo)
+        console.log("oferta Aceptada ",data)
         
         if(storedCredentials.tipo=="cliente"){
           Alert.alert(
@@ -210,10 +224,14 @@ const AppNavigator = ({ store }) => {
         }
         
         
-        if(storedCredentials.tipo=="contratista"){
+        if(storedCredentials.tipo==="contratista"){
 
           if(data.offer.contratista === storedCredentials._id){
-          Alert.alert(
+          
+          //  setScreenDefault("Principal")
+
+
+            Alert.alert(
             "Han aprobado su oferta",
             "Dirijase al punto de recojida",
             [
@@ -228,6 +246,7 @@ const AppNavigator = ({ store }) => {
         
       }
 
+console.log("trayendo sol nueva ",storedCredentials.tipo)
         socket.emit("solicitudPendiente", storedCredentials);
         
       })
@@ -263,7 +282,7 @@ const AppNavigator = ({ store }) => {
   };
 
   return (
-    <Drawer.Navigator drawerContent={(props) => <Menu {...props} />}>
+    <Drawer.Navigator initialRouteName={screenDefault} drawerContent={(props) => <Menu {...props} />}>
       <Drawer.Screen name="Principal">
         {(props) => {
           return (

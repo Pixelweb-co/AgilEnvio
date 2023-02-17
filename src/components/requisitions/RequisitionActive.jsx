@@ -7,27 +7,60 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import MapComponent from "../../maps/MapComponent";
-import DestinationsRequisition from "../../requisitions/driver/DestinationsRequisition";
-import NegotiateRequisitionClient from "./NegotiateRequisitionClient";
 
-import { useSelector } from "react-redux";
+
+//reducers
+import {
+  changeOrigin,
+  addDestination,
+  addLocation,
+  openSheet,
+  closeSheet,
+  changeStatus,
+  setRequisition,
+  setOffers,
+  setReduxSocket,
+  changeAppMode,
+  setDriverList,
+  setValorSol,
+} from "../../reducers/actions/RequsitionActions";
+
+import MapComponent from "../maps/MapComponent";
+import DestinationsRequisition from "./driver/DestinationsRequisition";
+import NegotiateRequisitionClient from "./client/NegotiateRequisitionClient";
+
+import { useSelector,useDispatch } from "react-redux";
+import RequisitionList from "./driver/RequisitionList";
+import UserBox from "../acounts/UserBox";
 
 var { height } = Dimensions.get("window");
 var box_count = 3;
 var box_height = height / box_count;
 
 export default function RequisitionActive({ requisition, offers, socket }) {
-  const [requsitionSl, setRequisition] = useState(null);
+  const [requsitionSl, setRequisitionSl] = useState(null);
 
   const offersStore = useSelector((state) => state.reducers.offers);
+  const appMode = useSelector((state) => state.reducers.appMode);
+
+  const dispatch = useDispatch();
+
+
+  const requisitionActiveNow = (requsitionSl,offer)=>{
+
+    //alert("change active ",requsitionSl.status)
+   // console.log("req active change ",requsitionSl)
+    dispatch(setRequisition(requsitionSl)
+    );
+  }
+
 
   useEffect(() => {
-    setRequisition(requisition);
+    setRequisitionSl(requisition);
   }, [requisition]);
 
   const AcceptRequisition = async (offer) => {
-    console.log("accept ", offer);
+    //console.log("accept ", offer);
 
     const url = "http://api.agilenvio.co:2042/api/aceptar_solicitud";
 
@@ -45,15 +78,12 @@ export default function RequisitionActive({ requisition, offers, socket }) {
       })
       .then(response => response.json())
       .then(data => {
-        console.log("Result solicitud ", data);
+      //  console.log("Result solicitud ", data);
         if (data.result === "SUCCESS") {
-          dispatch(
-            setRequisition({
-              ...requisition.reducers.requisition,
-              status: "Active",
-              id_driver: offer.contratista,
-            })
-          );
+
+        //  console.log("from backend active sol ",data.solicitud)
+          //alert("chg ",data.solicitud.status)
+          requisitionActiveNow(data.solicitud,data.offer)
         }
 
       })
@@ -112,7 +142,7 @@ export default function RequisitionActive({ requisition, offers, socket }) {
                   }}
                 >
                   {offersStore.map((item, index) => {
-                    console.log("ofc ", item);
+                  //  console.log("ofc ", item);
                     return (
                       <View
                         key={index}
@@ -182,7 +212,7 @@ export default function RequisitionActive({ requisition, offers, socket }) {
                             }}
                           >
                             <TouchableOpacity
-                              onPress={() => AcceptRequisition()}
+                              onPress={() => AcceptRequisition(item)}
                             >
                               <Text style={{ color: "white" }}>✓</Text>
                             </TouchableOpacity>
@@ -195,13 +225,39 @@ export default function RequisitionActive({ requisition, offers, socket }) {
               )}
             </View>
             <View style={{ backgroundColor: "#FFFFFF", flex: 5 }}>
-              <DestinationsRequisition requisition={requsitionSl} />
+            <Text>COP ${requsitionSl.tarifa.valor} Forma de pago: {requsitionSl.tarifa.formaPago}</Text>
+            
+            <DestinationsRequisition requisition={requsitionSl} />      
+
+            {requsitionSl.status === 'PENDING' &&       
+            <>
               <NegotiateRequisitionClient
                 requisition={requsitionSl}
                 socket={socket}
               />
+            </> 
+            }
+
+            {requsitionSl.status === 'Abierta' &&
+            <UserBox/>
+            }
 
               <View style={styles.container}>
+               
+               
+               {requsitionSl.status === 'Abierta' && appMode === 'driver' &&
+                <View style={styles.row}>
+                  <View style={styles.singleColumn}>
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={() => null}
+                    >
+                      <Text style={styles.buttonText}>Terminar Servicio</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+               }
+               
                 <View style={styles.row}>
                   <View style={styles.singleColumn}>
                     <TouchableOpacity
@@ -249,7 +305,7 @@ const styles = new StyleSheet.create({
     fontSize: 16,
   },
   container: {
-    flex: 0.4,
+    flex: 0.6,
     flexDirection: "column",
   },
   row: {

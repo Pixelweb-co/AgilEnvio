@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "agilenvio",
-    "slug": "agilenvio",
+    "name": "Agilenvio",
+    "slug": "Agilenvio",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,7 +20,7 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "This app requires access to your location for certain features to work."
+        "NSLocationWhenInUseUsageDescription": "Esta aplicacion necesita su ubicaciòn para sus funciones."
       }
     },
     "android": {
@@ -32,7 +32,7 @@
       "versionCode": 1,
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s"
+          "apiKey": "s"
         }
         },
         "permissions": [

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { View, Text } from "react-native";
 
-import RequisitionActive from "../components/requisitions/client/RequisitionActive";
+import RequisitionActive from "../components/requisitions/RequisitionActive";
 import NewRequisition from "../components/requisitions/client/NewRequistion";
 import RequisitionList from "../components/requisitions/driver/RequisitionList";
 
@@ -13,9 +13,9 @@ const PaginaPrincipal = ({
   navigation,
 }) => {
   useEffect(() => {
-   
+   console.log("change requisition ",requisition)
     
-  }, []);
+  }, [requisition]);
 
   return (
     <View>
@@ -30,7 +30,7 @@ const PaginaPrincipal = ({
 
      <Text>Servicios de emergencia</Text> */}
 
-      {requisition.status === "PENDING" && <RequisitionActive offers={offers} socket={socket} requisition={requisition} />}
+      {(requisition.status === "PENDING" || requisition.status === "Abierta") && <RequisitionActive offers={offers} socket={socket} requisition={requisition} />}
 
       {appMode === "client" && requisition.status === "NEW" && (
         <NewRequisition socket={null} />
