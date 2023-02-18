@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Avatar, Card, ListItem, Button,Input } from 'react-native-elements'
+//import {Avatar, Card, ListItem, Button,Input } from 'react-native-elements'
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -199,7 +199,7 @@ export default class ListDragDestinations extends React.Component {
           {item.title}
         </Text>
         <View style={{marginRight:5}}>
-        <Button
+        {/* <Button
                         
                         buttonStyle={{
                             backgroundColor:'red',
@@ -216,10 +216,10 @@ export default class ListDragDestinations extends React.Component {
                         }
                                                 
                         />
-        
+         */}
         </View>
         <View {...(noPanResponder ? {} : this._panResponder.panHandlers)}>
-        <Button
+        {/* <Button
                         
                         icon={
                             <Icon
@@ -229,7 +229,7 @@ export default class ListDragDestinations extends React.Component {
                             />
                         }
                                                 
-                        />
+                        /> */}
         </View>
       </View>
     );

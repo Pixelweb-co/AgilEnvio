@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import { Image, View, Text, StyleSheet, useWindowDimensions, Modal,TextInput,TouchableOpacity  } from 'react-native'
 
-import { Button, SearchBar,ListItem  } from 'react-native-elements';
+//import { Button, SearchBar,ListItem  } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { useSelector, useDispatch } from 'react-redux';
-import {changeTarifa, changeOrigin,addDestination,addLocation } from '../../../redux/actions/RequsitionActions';
+import {changeTarifa, changeOrigin,addDestination,addLocation } from '../../../reducers/actions/RequsitionActions';
 
 
 
-import close from "../../../assets/img/close.png";
+import close from "../../../../assets/img/close.png";
 
 
 const formas_dePago = ['efectivo','nequi','bancolombia'];
@@ -118,16 +118,16 @@ function PriceSelector({visible, closeModal}) {
                     <View>
                    {formas_dePago && formas_dePago.map((itemFP,keyP)=>{
                    //console.log("itemFP ",itemFP)
-                   return(<ListItem key={keyP}>
-                            <ListItem.Content>
-                                <ListItem.Title onPress={()=>HandleChangeFormaPago(itemFP)}>{itemFP}</ListItem.Title>
-                            </ListItem.Content>
-                   </ListItem>)
+                   return(<View key={keyP}>
+                            <View>
+                                <Text onPress={()=>HandleChangeFormaPago(itemFP)}>{itemFP}</Text>
+                            </View>
+                   </View>)
                    })}
                     </View>
                 </View>
 
-                 
+{/*                  
                 <Button
                         onPress={()=>setTarifaRequisition()}
                         icon={
@@ -139,7 +139,7 @@ function PriceSelector({visible, closeModal}) {
                         }
                         iconLeft
                         title="Ofrecer tarifa y medio de pago"
-                        />       
+                        />        */}
 
                 </View>
             </View>

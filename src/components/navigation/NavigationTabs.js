@@ -6,6 +6,7 @@ import MotoForm from '../requisitions/forms/MotoForm';
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from '@expo/vector-icons';
 import { useState,useEffect } from 'react';
+import PaqueteForm from '../requisitions/forms/PaqueteForm';
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -43,6 +44,19 @@ export default function NavigationTabs({store}) {
         }}
         component={MotoForm}
         name='Moto'
+      />
+      <Tab.Screen
+        options={{
+          title: ({ color, focused }) => (
+            <Ionicons
+              size={25}
+              name={focused ? 'people-sharp' : 'people-outline'}
+              color={focused ? 'blue' : '#272727'}
+            />
+          ),
+        }}
+        component={PaqueteForm}
+        name='Paquete'
       />
      
     </Tab.Navigator>

@@ -22,7 +22,7 @@ import ListDragDestinations from "./ListDragDestinations";
 
 
 import { useSelector, useDispatch } from 'react-redux';
-import { changeOrigin, addDestination, addLocation, openSheet, closeSheet } from '../../../redux/actions/RequsitionActions';
+import { changeOrigin, addDestination, addLocation, openSheet, closeSheet } from '../../../reducers/actions/RequsitionActions';
 
 export default function DestinationsSheetModal({ visible, closeModal, openModal }) {
     const [darkmode, setDarkmode] = useState(false);

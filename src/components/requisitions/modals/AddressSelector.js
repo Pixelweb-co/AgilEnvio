@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import { Image, View, Text, StyleSheet, useWindowDimensions, Modal,TextInput,TouchableOpacity  } from 'react-native'
 
-import { Button, SearchBar,ListItem  } from 'react-native-elements';
+//import { Button, SearchBar,ListItem  } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { changeOrigin,addDestination,addLocation } from '../../../redux/actions/RequsitionActions';
+import { changeOrigin,addDestination,addLocation } from '../../../reducers/actions/RequsitionActions';
 import Constants from 'expo-constants';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
-import close from "../../../assets/img/close.png";
+import close from "../../../../assets/img/close.png";
 
 function AddressSelector({visible,fieldAddressSelected, closeModal,typeSelector,changeLocation}) {
     const dispatch = useDispatch();
@@ -108,7 +108,7 @@ function AddressSelector({visible,fieldAddressSelected, closeModal,typeSelector,
                     alignItems:"center"
                 }}
                 >
-                    <Button
+                    {/* <Button
                         onPress={()=>closeModal()}
                         icon={
                             <Icon
@@ -119,7 +119,7 @@ function AddressSelector({visible,fieldAddressSelected, closeModal,typeSelector,
                         }
                         iconLeft
                         title=" Buscar en el mapa"
-                        />
+                        /> */}
 
 
                 </View> 
