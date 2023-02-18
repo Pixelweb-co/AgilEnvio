@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text,Image } from 'react-native';
 import { useSelector } from 'react-redux';
-
+import {AntDesign} from '@expo/vector-icons';
 
 
 export default function UserBox({requisition}) {
@@ -87,8 +87,8 @@ export default function UserBox({requisition}) {
           justifyContent: "space-between",
           alignItems: "center",
         }}
-      >
-        <Text>{AppMode==='driver' ? ("Cliente"):("Conductor")} : {userData && userData.nombres}</Text>
+      > 
+        <Text>{AppMode==='driver' ? ("Cliente"):("Conductor")}:  {userData && userData.nombres}</Text>
       </View>
 
       {/* Fila 2 */}
@@ -100,7 +100,7 @@ export default function UserBox({requisition}) {
         }}
       >
         <Text>
-          <Text>Tel: {userData && userData.telefono}</Text>
+          <Text>Telèfono:    {userData && userData.telefono}</Text>
         </Text>
       </View>
     </View>
@@ -115,12 +115,12 @@ export default function UserBox({requisition}) {
     >
       <View
         style={{
-          backgroundColor: "green",
+          backgroundColor: "orange",
           padding: 10,
           borderRadius: 5,
         }}
       >
-       <Text> ok</Text>
+      <AntDesign name='wechat' size={32} color='#FFF' />
       </View>
     </View>
   </View>

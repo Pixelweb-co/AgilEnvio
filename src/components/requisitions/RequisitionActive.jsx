@@ -3,6 +3,7 @@ import {
   View,
   Image,
   Text,
+  Alert,  
   StyleSheet,
   TouchableOpacity,
   Dimensions,
@@ -47,9 +48,6 @@ export default function RequisitionActive({ requisition, offers, socket }) {
 
 
   const requisitionActiveNow = (requsitionSl,offer)=>{
-
-    //alert("change active ",requsitionSl.status)
-   // console.log("req active change ",requsitionSl)
     dispatch(setRequisition(requsitionSl)
     );
   }
@@ -90,13 +88,85 @@ export default function RequisitionActive({ requisition, offers, socket }) {
       .catch(error => console.error(error));
   };
 
+  const terminateRequisition = async()=>{
+
+
+    const url = 'http://api.agilenvio.co:2042/api/terminar_solicitud';
+        
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({
+        requisition:requisition
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Result solicitud ",data)
+      if(data.result === "SUCCESS"){
+        requisitionActiveNow({
+          id:null,
+          id_client:null,
+          client_data:null,
+          id_driver:null,
+          origin:{title:"initial",coords:null},
+          destinations:[],
+          status:"NEW",
+          tarifa:{valor:0,formaPago:"efectivo"},
+          type:null,
+          comments:{notes:"",serviceTypeOptions:null}
+        }) 
+
+        Alert.alert(
+          "Ha termiado su servicio",
+          "Gracias por preferrirnos",
+          [
+            {
+              text: "Cerrar",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            }
+          ]
+        );
+
+    }})
+    .catch(error => console.error(error));
+
+
+
+  }
+
+  const showFinishDialog = () => {
+    return Alert.alert(
+      "",
+      "Desea finalizar ahora?",
+      [
+        // The "Yes" button
+        {
+          text: "Si",
+          onPress: () => {
+            terminateRequisition();
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+        },
+      ]
+    );
+  };
+
+
   return (
     <>
       {requsitionSl !== null && (
         <>
           <View style={{ height: height }}>
-            <View style={{ backgroundColor: "#7cb48f", flex: 0.7 }}>
-              <Text>
+            <View style={{ backgroundColor: "blue", flex: 0.8,padding:((height / 70)) }}>
+              <Text style={{color:"white"}}>
                 Con el fin de brindar seguridad , este servicio sera rastreado
                 por GPS y su ubicación sera confidencial. Solo revelará por una
                 orden judicial.
@@ -225,8 +295,12 @@ export default function RequisitionActive({ requisition, offers, socket }) {
                 </View>
               )}
             </View>
-            <View style={{ backgroundColor: "#FFFFFF", flex: 5 }}>
-            <Text>COP ${requsitionSl.tarifa.valor} Forma de pago: {requsitionSl.tarifa.formaPago}</Text>
+            <View style={{ flex: 5 }}>
+           
+           
+           <View >
+            <Text style={{padding:4,alignContent:"center",alignItems:"center" ,backgroundColor:"blue", color:"#FFF"}}>COP ${requsitionSl.tarifa.valor} Forma de pago: {requsitionSl.tarifa.formaPago}</Text>
+            </View>
             
             <DestinationsRequisition requisition={requsitionSl} />      
 
@@ -251,7 +325,7 @@ export default function RequisitionActive({ requisition, offers, socket }) {
                   <View style={styles.singleColumn}>
                     <TouchableOpacity
                       style={styles.button}
-                      onPress={() => null}
+                      onPress={() => showFinishDialog()}
                     >
                       <Text style={styles.buttonText}>Terminar Servicio</Text>
                     </TouchableOpacity>

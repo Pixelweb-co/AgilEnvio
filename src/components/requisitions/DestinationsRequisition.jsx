@@ -1,6 +1,8 @@
 import {React,useEffect,useState} from 'react';
 import {StyleSheet, View, TouchableOpacity, Image,Text } from 'react-native';
 
+import iconDestination from '../../../assets/img/markerMenu.png'
+
 const alphabet = ["B","C","D","F","G","H","I","J"]
 
 const DestinationsRequisition = ({requisition}) =>{
@@ -11,20 +13,32 @@ const DestinationsRequisition = ({requisition}) =>{
     
 <View style={styles.container}>
 <View style={styles.row}>
-  <View style={[styles.column, { flex: 1 }]}>
-  
-       
+  <View style={[styles.column, { flex: 1,alignContent:"center",alignItems:"center",paddingTop:5.5 }]}>
+    <View style={{
+          backgroundColor: "lime",
+          padding: 5,
+          borderRadius: (Math.round(12 + 12) / 2),
+          width:(12*0.5),
+          height:(12*0.5)
+        }}></View>
+
     </View>
   <View style={[styles.column, { flex: 12 }]}>
-  <Text>{requisition.origin.title}</Text>
+  <Text style={styles.textDestination}>{requisition.origin.title}</Text>
   </View>
 </View>
 <View style={styles.row}>
-  <View style={[styles.column, { flex: 1 }]}>
-    {/* Columna 1 de la segunda fila */}
+  <View style={[styles.column, { flex: 1,alignContent:"center",alignItems:"center",paddingTop:5.5 }]}>
+  <View style={{
+          backgroundColor: "red",
+          padding: 5,
+          borderRadius: (Math.round(12 + 12) / 2),
+          width:(12*0.5),
+          height:(12*0.5)
+        }}></View>
   </View>
   <View style={[styles.column, { flex: 12 }]}>
-  <Text>{requisition.destinations[requisition.destinations.length-1].title}</Text>
+  <Text style={styles.textDestination}>{requisition.destinations[requisition.destinations.length-1].title}</Text>
        
   </View>
 </View>
@@ -48,6 +62,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         borderColor: '#CCC',
+        paddingTop:5,
+        paddingBottom:5
     },
       row: {
         flex: 1,
@@ -56,6 +72,11 @@ const styles = StyleSheet.create({
       column: {
         borderWidth: 0,
         borderColor: '#000',
+      },
+      textDestination:{
+        fontSize:14,
+        color:"blue",
+        fontWeight:"bold"
       }
   });
   
