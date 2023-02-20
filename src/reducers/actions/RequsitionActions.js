@@ -112,4 +112,9 @@ export const changeOrigin = (origin) => {
     };
   };
 
-  
+  export const setNewStep = (step) => {
+    return {
+       type: 'SET_STEP_NEW',
+       payload:step
+     };
+   };

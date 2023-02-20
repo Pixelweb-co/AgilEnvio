@@ -42,6 +42,11 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
   }, []);
 
   useEffect(()=>{
+   // console.log("Requi",requisitionSelected)
+
+  },[requisitionSelected])
+
+  useEffect(()=>{
 
     if(locationDriver!==null && Appmode === "client" && requisition.origin.coords){
     //calcular segun paso distancia de la ubicacion de el driver y el origen de la solicitud
@@ -174,6 +179,7 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
 
   return (
     <View style={styles.container}>
+      
       {region && (
         <MapView
           ref={(map) => {
@@ -213,7 +219,7 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
               );
             })}
 
-          {type === "viewDriver" && travelDestinationsComplete == 0 && requisitionSelected.origin && (
+          {(type === "viewDriver" || type === "viewNew") && travelDestinationsComplete == 0 && requisitionSelected.origin.coords && (
             <Marker.Animated
               ref={(marker) => {
                 HomeMarker = marker;
@@ -222,10 +228,11 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
             />
           )}
 
-          {type === "viewDriver" &&
+          {(type === "viewDriver"  || type === "viewNew") &&
             requisitionSelected.destinations &&
             requisitionSelected.destinations.map((item, index) => {
               return (
+
                 <Marker.Animated
                   key={index}
                   ref={(marker) => {
@@ -233,10 +240,11 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
                   }}
                   coordinate={item.coords}
                 />
+                
               );
             })}
 
-          {type === "viewDriver" &&
+          {(type === "viewDriver"  || type === "viewNew") &&
             requisitionSelected.destinations.length > 0 &&
             requisitionSelected.origin.coords != null && (
               <Polyline
@@ -251,7 +259,7 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
             )}
 
           {/* marcador driver       */}
-          {locationDriver !== null &&       
+          {locationDriver !== null && requisitionSelected.status==="abierta" &&       
           <Marker.Animated coordinate={locationDriver}>
             <View
               style={{

@@ -20,7 +20,8 @@ const initialState = {
     requisitionListPending:[],
     locations:[],
     requisitionNegotiate:null,
-    locationDriver:null
+    locationDriver:null,
+    stepNew:0    
   };
    
   export default (state = initialState, action) => {
@@ -109,6 +110,8 @@ const initialState = {
         case 'SET_DRIVER_LOCATION':
           let origTmp6 = {...state, locationDriver: action.payload};
           return origTmp6
+        case 'SET_STEP_NEW':
+          let stepd = {...state, stepNew: action.payload}
         default:
           return state;
     }

@@ -4,7 +4,7 @@ import { View, Text } from "react-native";
 import RequisitionActive from "../components/requisitions/RequisitionActive";
 import NewRequisition from "../components/requisitions/client/NewRequistion";
 import RequisitionList from "../components/requisitions/driver/RequisitionList";
-import Requisition from "../components/requisitions/client/Requisition";
+import Requisition from "../components/requisitions/client/Requisition"; 
 
 const PaginaPrincipal = ({
   offers,
@@ -36,7 +36,7 @@ const PaginaPrincipal = ({
       {appMode === "client" && requisition.status === "NEW" && (
         
 
-        <Requisition socket={socket}/>
+        <Requisition socket={socket} navigation={navigation}/>
       )}
 
       {appMode === "driver" && requisition.status === "NEW" && (
