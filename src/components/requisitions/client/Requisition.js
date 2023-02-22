@@ -224,7 +224,7 @@ export default function Requisition({ navigation, socket }) {
       <StatusBar style="auto" />
       {/* <ServicesMenu/> */}
       {/* <Text style={styles.paragraph}>{text}</Text> */}
-      <View style={{ height: 330 }}>
+      <View style={{ height: 300 }}>
         <NavigationTabs
           store={requisition.reducers}
           user={storedCredentials}
@@ -243,8 +243,9 @@ export default function Requisition({ navigation, socket }) {
           accessibilityLabel="Solicitar servicio"
         />
       </View>
+      
       <DestinationsSheetModal
-        visible={requisition.reducers.sheetMenu}
+        visible={true}
         closeModal={() => {
           CloseModalStore();
         }}

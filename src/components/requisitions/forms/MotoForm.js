@@ -12,7 +12,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 import AddressSelector from "../modals/AddressSelector";
 import PriceSelector from "../modals/PriceSelector";
-import DestinationsSheetModal from "../modals/DestinationsSheetModal";
+import DestinationsSheetModal from "../modals/DestinationsSheetModal"; 
 import MarkerMenu from "../../../../assets/img/markerMenu.png";
 import MoneyMenu from "../../../../assets/img/money.png";
 

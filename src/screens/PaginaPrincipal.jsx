@@ -5,6 +5,7 @@ import RequisitionActive from "../components/requisitions/RequisitionActive";
 import NewRequisition from "../components/requisitions/client/NewRequistion";
 import RequisitionList from "../components/requisitions/driver/RequisitionList";
 import Requisition from "../components/requisitions/client/Requisition"; 
+import DestinationsSheetModal from "../components/requisitions/modals/DestinationsSheetModal";
 
 const PaginaPrincipal = ({
   offers,
@@ -46,6 +47,9 @@ const PaginaPrincipal = ({
           navigation={navigation}
         />
       )}
+
+   
+   
     </View>
   );
 };

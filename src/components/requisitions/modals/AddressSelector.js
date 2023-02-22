@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useLayoutEffect, useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {
   Modal,
@@ -14,6 +14,11 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import FavoritesCard from "../UiModules/FavoritesCard";
 import AddAddressCard from "../UiModules/AddAddressCard";
 
+
+import * as Location from "expo-location";
+import axios from "axios";
+
+
 import { useSelector, useDispatch } from "react-redux";
 import {
   changeOrigin,
@@ -22,6 +27,8 @@ import {
 } from "../../../reducers/actions/RequsitionActions";
 
 import close from "../../../../assets/img/close.png";
+import MapPickerAddress from "../UiModules/MapPickAddress";
+import MapPickerCard from "../UiModules/MapPickerCard";
 
 const AddressSelector = ({
   visible,
@@ -34,36 +41,261 @@ const AddressSelector = ({
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showFavorites, setShowFavorites] = useState(false);
   const [showAddressAdd, setAddressAdd] = useState(false);
-  const dispatch = useDispatch()
+  const [favoritesList,setFavoritesList]=useState([])
+  const dispatch = useDispatch();
+  const destinations = useSelector(
+    (store) => store.reducers.requisition.destinations
+  );
+
+  const AppMode = useSelector((store)=>store.reducers.appMode)
+  const [optionSet, setOptionSet] = useState("address");
+  const [MyLocation,setMyLocation]=useState(null)  
+  const [MyLastLocation,setMyLastLocation]=useState(null)  
+  const [mapPicker,showMapPicker]=useState(null)
+
+  const data = [];
+
+
+  useLayoutEffect(() => {
+    (async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      //console.log("permiso ubicacion ",status)
+
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+     
+      let locationF = await Location.getCurrentPositionAsync({});
+      
+      
+      const url = 'https://maps.googleapis.com/maps/api/geocode/json?';
+      axios
+        .get(url, {params:{ key: "AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s",latlng:locationF.coords.latitude.toString()+','+locationF.coords.longitude.toString() }})
+        .then((response) => {
+        //    console.log("data rs ",response.data)
+          const result = {
+            title:response.data.results[0].address_components[1].short_name+' '+response.data.results[0].address_components[0].short_name+' '+response.data.results[0].address_components[2].short_name+' '+response.data.results[0].address_components[3].short_name+' '+response.data.results[0].address_components[4].short_name,
+            coords:locationF.coords,
+            id:response.data.results[0].place_id
+          }
+
+          ///console.log("my location ",result)
+          setMyLocation(result); 
+      
+        })
+        .catch((error) => {
+//          handleMessage('An error occurred. Check your network and try again');
+          console.log(error.toJSON());
+        });
+
+      
+
+    })();
   
-  const data = [
-    { key: "favorite", label: "Favoritos" },
-    { key: "lastLocation", label: "Última ubicación" },
-    { key: "home", label: "Casa" },
-    { key: "work", label: "Trabajo" },
-    { key: "study", label: "Estudio" },
-    { key: "currentLocation", label: "Mi ubicación actual" },
-  ];
+     (async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      //console.log("permiso ubicacion ",status)
 
-  useEffect(() => {
-    if (user) {
-      console.log("user un adrress", user);
-    }
-  }, [user]);
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
 
-  const handleAddDestination = (destination,place) => {
-    console.log("destination Pick: ", destination.geometry.location);
-    console.log("place Pick: ", place.description);
+     
+      let locationF = await Location.getCurrentPositionAsync({});
+      
+      
+      const url = 'https://maps.googleapis.com/maps/api/geocode/json?';
+      axios
+        .get(url, {params:{ key: "AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s",latlng:locationF.coords.latitude.toString()+','+locationF.coords.longitude.toString() }})
+        .then((response) => {
+        //    console.log("data rs ",response.data)
+          const result = {
+            title:response.data.results[0].address_components[1].short_name+' '+response.data.results[0].address_components[0].short_name+' '+response.data.results[0].address_components[2].short_name+' '+response.data.results[0].address_components[3].short_name+' '+response.data.results[0].address_components[4].short_name,
+            coords:locationF.coords,
+            id:response.data.results[0].place_id
+          }
+
+          ///console.log("my location ",result)
+          setMyLocation(result); 
+      
+        })
+        .catch((error) => {
+//          handleMessage('An error occurred. Check your network and try again');
+          console.log(error.toJSON());
+        });
+
+      
+
+    })();
+
+    (async () => {
+      
+      console.log("AppMode ",AppMode)
+
+    if(user && AppMode === "client"){
+    const endpoint = "http://api.agilenvio.co:2042/api/lastlocation";
+      
+    console.log("user",user)
+
+    const postData = {
+      user: user._id 
+    };
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: JSON.stringify(postData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("last location ",data)  
+        
+        setMyLastLocation(data)
+
+
+      })
+      .catch((error) => console.error(error));
+  
+
+
+    }  
+    })();
     
-    console.log("type: ", typeSelector);
-    
+  }, [user,visible]);
+
+
+  const DoSendMyLocation = ()=>{
+
+    console.log("send my location ",MyLocation)
 
     if (typeSelector === "origin") {
       dispatch(
         changeOrigin({
           order: 0,
+          title: MyLocation.title,
+          coords: {
+            latitude: MyLocation.coords.latitude,
+            longitude: MyLocation.coords.longitude,
+          },
+          id: MyLocation.id,
+        })
+      );
+    }
+
+    if (typeSelector === "destinations") {
+      dispatch(
+        addDestination({
+          order: destinations.length + 1,
+          title: MyLocation.title,
+          coords: {
+            latitude: MyLocation.coords.latitude,
+            longitude: MyLocation.coords.longitude,
+          },
+          id: MyLocation.id,
+        })
+      );
+    }
+    setShowFavorites(false);
+    setSelectedAddress([]);
+    setAddressAdd(false);
+    closeModal();
+
+  }
+
+  const DoSendMyLastLocation = ()=>{
+
+    console.log("send my location ",MyLastLocation)
+
+    if (typeSelector === "origin") {
+      dispatch(
+        changeOrigin({
+          order: 0,
+          title: MyLastLocation.title,
+          coords: {
+            latitude: MyLastLocation.coords.latitude,
+            longitude: MyLastLocation.coords.longitude,
+          },
+          id: MyLastLocation.id,
+        })
+      );
+    }
+
+    if (typeSelector === "destinations") {
+      dispatch(
+        addDestination({
+          order: destinations.length + 1,
+          title: MyLastLocation.title,
+          coords: {
+            latitude: MyLastLocation.coords.latitude,
+            longitude: MyLastLocation.coords.longitude,
+          },
+          id: MyLastLocation.id,
+        })
+      );
+    }
+    setShowFavorites(false);
+    setSelectedAddress([]);
+    setAddressAdd(false);
+    closeModal();
+
+  }
+
+
+  const DoSendMapPicker = (locationPicked)=>{
+
+    console.log("send pick location ",locationPicked)
+
+    if (typeSelector === "origin") {
+      dispatch(
+        changeOrigin({
+          order: 0,
+          title: locationPicked.title,
+          coords: {
+            latitude: locationPicked.coords.latitude,
+            longitude: locationPicked.coords.longitude,
+          },
+          id: locationPicked.id,
+        })
+      );
+    }
+
+    if (typeSelector === "destinations") {
+      dispatch(
+        addDestination({
+          order: destinations.length + 1,
+          title: locationPicked.title,
+          coords: {
+            latitude: locationPicked.coords.latitude,
+            longitude: locationPicked.coords.longitude,
+          },
+          id: locationPicked.id,
+        })
+      );
+    }
+    setShowFavorites(false);
+    setSelectedAddress([]);
+    setAddressAdd(false);
+    closeModal();
+
+  }
+
+  const DoSendAddress = (destination, place) => {
+    if (typeSelector === "origin") {
+      dispatch(
+        changeOrigin({
+          order: 0,
           title: place.description,
-          coords: { latitude: destination.geometry.location.lat, longitude: destination.geometry.location.lng },
+          coords: {
+            latitude: destination.geometry.location.lat,
+            longitude: destination.geometry.location.lng,
+          },
           id: place.place_id,
         })
       );
@@ -72,17 +304,100 @@ const AddressSelector = ({
     if (typeSelector === "destinations") {
       dispatch(
         addDestination({
-          order: locations.length + 1,
+          order: destinations.length + 1,
           title: place.description,
-          coords: { latitude: destination.geometry.location.lat, longitude: destination.lng },
+          coords: {
+            latitude: destination.geometry.location.lat,
+            longitude: destination.geometry.location.lng,
+          },
           id: place.place_id,
         })
       );
     }
-    setShowFavorites(false)
-    setSelectedAddress([])
-    setAddressAdd(false)
+    setShowFavorites(false);
+    setSelectedAddress([]);
+    setAddressAdd(false);
     closeModal();
+  };
+
+  useEffect(()=>{
+    if(user){
+    console.log("cangando favoritos")
+    load_favorites()  
+    }
+  },[user])
+
+  const load_favorites = async ()=>{
+
+    // Send load user from API endpoint
+    const endpoint = "http://api.agilenvio.co:2042/api/obtener_favoritos";
+
+    const postData = {
+      user: user._id
+    };
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: JSON.stringify(postData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        //console.log("favoritos ",data)
+        setFavoritesList(data)
+
+
+      })
+      .catch((error) => console.error(error));
+  
+
+
+  }
+
+  const DoSaveFavorite = async (destination, place) => {
+    console.log("save ", optionSet);
+
+    // Send load user from API endpoint
+    const endpoint = "http://api.agilenvio.co:2042/api/setfavorite";
+
+    const postData = {
+      user: user._id,
+      destination: destination,
+      place: place,
+      key: optionSet,
+    };
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: JSON.stringify(postData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setOptionSet("address");
+        load_favorites() ;
+        DoSendAddress(destination, place);
+       
+      })
+      .catch((error) => console.error(error));
+  };
+
+  const handleAddDestination = (destination, place, type) => {
+    console.log("destination Pick: ", destination);
+    console.log("place Pick: ", place.description);
+
+    console.log("type: ", typeSelector);
+    console.log("optionSet ", optionSet);
+
+    if (optionSet === "address") {
+      DoSendAddress(destination, place);
+    } else {
+      DoSaveFavorite(destination, place);
+    }
   };
 
   const renderSeparator = () => {
@@ -96,6 +411,19 @@ const AddressSelector = ({
       </TouchableOpacity>
     );
   };
+
+  const RenderAddressLabel = ({keyLabel }) => {
+    var found = keyLabel.favoritesListD.find((item) => item.key === keyLabel.key)
+    
+    return(
+    <React.Fragment>
+    { found && 
+    <Text style={styles.optionLabel}>{found.place.description}</Text>
+    }
+    </React.Fragment>
+    )
+
+  }
 
   return (
     <Modal visible={visible} onRequestClose={closeModal} animationType="slide">
@@ -112,34 +440,13 @@ const AddressSelector = ({
             }}
           />
         </TouchableOpacity>
-        {/* <View style={autoCompleteStyles.inputContainer}>
-          
-          
-          
-          <GooglePlacesAutocomplete
-            placeholder="Buscar dirección"
-            onPress={(data, details = null) => {
-              setSelectedAddress(data.description);
-            }}
-            query={{
-              key: "AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s",
-              components: "country:CO",
-              language: "es",
-            }}
-            styles={{
-              textInput: autoCompleteStyles.input,
-              listView: autoCompleteStyles.listView,
-            }}
-          />
-        </View> */}
-
-        {!showFavorites && !showAddressAdd && (
+        {!showFavorites && !showAddressAdd && !mapPicker && (
           <View style={autoCompleteStyles.titleContainer}>
             <Text>Selecciona una direcciòn</Text>
           </View>
         )}
 
-        {!showFavorites && !showAddressAdd && (
+        {!showFavorites && !showAddressAdd && !mapPicker && (
           <View style={styles.optionsContainer}>
             <View style={styles.optionsRow}>
               <TouchableOpacity
@@ -151,7 +458,10 @@ const AddressSelector = ({
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.option}
-                onPress={() => setAddressAdd(true)}
+                onPress={() => {
+                  setOptionSet("address");
+                  setAddressAdd(true);
+                }}
               >
                 <Icon name="plus" size={30} color="#828282" />
                 <Text style={styles.optionLabel}>Agregar nueva dirección</Text>
@@ -159,48 +469,130 @@ const AddressSelector = ({
             </View>
 
             <View style={styles.optionsRow}>
-              <TouchableOpacity style={styles.option}>
+              <TouchableOpacity style={styles.option} onPress={()=>{
+
+                  if(MyLocation !== null){
+
+                    DoSendMyLocation()
+
+                  }
+
+              }}>
                 <Icon name="map-marker" size={30} color="#BB6BD9" />
                 <Text style={styles.optionLabel}>Mi ubicación actual</Text>
+                <Text style={styles.optionLabel}>{MyLocation && MyLocation.title}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.option}>
+              <TouchableOpacity style={styles.option} onPress={()=>{
+                
+                if(MyLastLocation!==null){
+                  DoSendMyLastLocation()
+                }
+
+              }}>
                 <Icon name="history" size={30} color="#6FCF97" />
                 <Text style={styles.optionLabel}>Última ubicación</Text>
+                <Text style={styles.optionLabel}>{MyLastLocation && MyLastLocation.title}</Text>
+              
+                
               </TouchableOpacity>
             </View>
+
             <View style={styles.optionsRow}>
-              <TouchableOpacity style={styles.option}>
+              <TouchableOpacity
+                style={styles.option}
+                onPress={() => {
+                  var search = favoritesList.find((item) => item.key === "work");
+                  if (search) {
+
+                    DoSendAddress(search.destination, search.place);
+                  } else {
+                    console.log("no exs ", search);
+                    setOptionSet("work");
+                    setAddressAdd(true);
+                  }
+                }}
+              >
                 <Icon name="briefcase" size={30} color="#27AE60" />
                 <Text style={styles.optionLabel}>Trabajo</Text>
+              <RenderAddressLabel keyLabel={{key:"work",favoritesListD:favoritesList}}/>
+
               </TouchableOpacity>
-              <TouchableOpacity style={styles.option}>
+
+              <TouchableOpacity
+                style={styles.option}
+                onPress={() => {
+                  var search = favoritesList.find((item) => item.key === "study");
+                  if (search) {
+                    DoSendAddress(search.destination, search.place);
+                  } else {
+                    console.log("no exs ", search);
+                    setOptionSet("study");
+                    setAddressAdd(true);
+                  }
+                }}
+              >
                 <Icon name="book" size={30} color="#EB5757" />
                 <Text style={styles.optionLabel}>Estudio</Text>
+                <RenderAddressLabel keyLabel={{key:"study",favoritesListD:favoritesList}}/>
+
               </TouchableOpacity>
             </View>
+
             <View style={styles.optionsRow}>
-              <TouchableOpacity style={styles.option}>
+              <TouchableOpacity
+                style={styles.option}
+                onPress={() => {
+                  var search = favoritesList.find((item) => item.key === "home");
+                  if (search) {
+                    DoSendAddress(search.destination, search.place);
+                  } else {
+                    console.log("no exs ", search);
+                    setOptionSet("home");
+                    setAddressAdd(true);
+                  }
+                }}
+              >
                 <Icon name="home" size={30} color="#F2994A" />
                 <Text style={styles.optionLabel}>Casa</Text>
+                <RenderAddressLabel keyLabel={{key:"home",favoritesListD:favoritesList}}/>
+
               </TouchableOpacity>
+              <TouchableOpacity style={styles.option} onPress={()=>{
+
+                  showMapPicker(true)
+
+}}>
+<Icon name="search" size={30} color="blue" />
+<Text style={styles.optionLabel}>Buscar en el Mapa</Text>
+<Text style={styles.optionLabel}>Mira donde...</Text>
+</TouchableOpacity>
+
             </View>
           </View>
         )}
 
-        {showFavorites && !showAddressAdd && (
+        {showFavorites && !showAddressAdd && !mapPicker && (
           <FavoritesCard
             user={user}
             closeFavorities={() => setShowFavorites(false)}
           />
         )}
-
-        {showAddressAdd && !showFavorites && (
+ 
+        {showAddressAdd && !showFavorites && !mapPicker && (
           <AddAddressCard
             user={user}
+            optionSet={optionSet}
             cloaseAddressAdd={() => setAddressAdd(false)}
             setAddress={handleAddDestination}
           />
         )}
+      
+        {!showAddressAdd && !showFavorites && mapPicker && (
+          
+          <MapPickerCard visible={mapPicker} pickAddress={DoSendMapPicker} close={()=>showMapPicker(false)}/>
+          
+        )} 
+      
       </View>
     </Modal>
   );

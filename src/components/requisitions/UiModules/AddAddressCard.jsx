@@ -5,7 +5,7 @@ import AddressPicker from './AddressPicker';
 
 
 
-const AddAddressCard = ({ user,cloaseAddressAdd,setAddress }) => {
+const AddAddressCard = ({optionSet, user,cloaseAddressAdd,setAddress }) => {
   
   return (
     <View style={{ backgroundColor: '#fff', borderRadius: 8, overflow: 'hidden' }}>
@@ -24,7 +24,7 @@ const AddAddressCard = ({ user,cloaseAddressAdd,setAddress }) => {
         >
           <Ionicons name="md-arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Selecciona una direcciòn</Text>
+        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Selecciona {optionSet === 'address' ? "una direcciòn":""}{optionSet === 'home' ? "donde vives":""}{optionSet === 'study' ? "donde estudias":""}{optionSet === 'work' ? "donde trabajas":""}</Text>
       </View>
       <AddressPicker setDirection={setAddress}/>
       

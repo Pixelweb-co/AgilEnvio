@@ -26,7 +26,7 @@ export const changeOrigin = (origin) => {
     };
   };
 
-  export const openSheet = (status) => {
+  export const setOpenSheet = (status) => {
     return {
       type: 'OPEN_SHEET',
       payload:status

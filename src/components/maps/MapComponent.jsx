@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, Alert } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { useSelector } from "react-redux";
 import * as Location from "expo-location";
+import Animated from 'react-native-reanimated';
 
 import { PermissionsAndroid } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -31,7 +32,7 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
 
   useEffect(() => {
     requestLocationPermission();
-
+   
     obtenerUbicacion();
 
     setInterval(()=>{
@@ -42,11 +43,13 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
   }, []);
 
   useEffect(()=>{
-   // console.log("Requi",requisitionSelected)
 
+    if(requisitionSelected){
+    console.log("Requi change",requisitionSelected)
+    }
   },[requisitionSelected])
 
-  useEffect(()=>{
+  useEffect(()=>{ 
 
     if(locationDriver!==null && Appmode === "client" && requisition.origin.coords){
     //calcular segun paso distancia de la ubicacion de el driver y el origen de la solicitud
@@ -179,7 +182,7 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
 
   return (
     <View style={styles.container}>
-      
+            
       {region && (
         <MapView
           ref={(map) => {
@@ -219,7 +222,7 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
               );
             })}
 
-          {(type === "viewDriver" || type === "viewNew") && travelDestinationsComplete == 0 && requisitionSelected.origin.coords && (
+          {(type === "viewDriver" || type === "viewNew") && requisitionSelected.origin.coords && (
             <Marker.Animated
               ref={(marker) => {
                 HomeMarker = marker;
@@ -244,6 +247,29 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
               );
             })}
 
+        {(type === "viewDriver"  || type === "viewNew") && requisitionSelected.destinations.length > 1 && requisitionSelected.destinations.map((item,index)=>{
+          //console.log("item cords ",(index-1))
+          if(item){
+          let lasTcords = requisitionSelected.destinations[index > 0 ? index-1: 0]
+          
+          //console.log("lastCords ",lasTcords)
+          let trace = [lasTcords.coords, item.coords]
+          
+          //console.log("trace ",trace)
+        return(
+          <Polyline
+          key={index}
+          coordinates={trace}
+          strokeColor="blue" // fallback for when `strokeColors` is not supported by the map-provider
+          strokeColors={['#7F0000']}
+          strokeWidth={3}
+        />        )
+
+       }
+
+        })}  
+
+
           {(type === "viewDriver"  || type === "viewNew") &&
             requisitionSelected.destinations.length > 0 &&
             requisitionSelected.origin.coords != null && (
@@ -254,7 +280,7 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
                 ]}
                 strokeColor="blue" // fallback for when `strokeColors` is not supported by the map-provider
                 strokeColors={["#7F0000"]}
-                strokeWidth={6}
+                strokeWidth={3}
               />
             )}
 

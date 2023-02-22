@@ -80,7 +80,7 @@ export default class ListDragDestinations extends React.Component {
   constructor(props) {
     super(props);
     console.log("load list destinations drag ",props.data)
-    
+     
     this._panResponder = PanResponder.create({
       
         // Ask to be the responder:
@@ -173,7 +173,7 @@ export default class ListDragDestinations extends React.Component {
   render() {
     const { data, dragging, draggingIdx } = this.state;
     
-    console.log("item ",this.props.data)    
+    //console.log("item ",this.props.data)    
     const renderItem = ({ item, index }, noPanResponder = false) => (
       <View
         onLayout={e => {

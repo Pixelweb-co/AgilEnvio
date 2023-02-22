@@ -22,7 +22,7 @@ import {
   addDestination,
   compSheet,
   closeSheet,
-  openSheet,
+  setOpenSheet,
   setRequsitionType,
   setNewStep
 } from "../../../reducers/actions/RequsitionActions";
@@ -76,18 +76,23 @@ function CarForm({ route}) {
   };
 
   const setVisibleList = (payload) => {
+    
+    console.log("list")
+    openSheetDa(true);
+  
+    
     if (requisition.requisition.destinations.length > 1) {
-      setModalDestinos(true);
-      openSheetDa(true);
+    //  setModalDestinos(true);
     } else {
-      openSheetDa(false);
-      setVisible(payload);
+      //openSheetDa(false);
+//      setVisible(payload);
     }
   };
 
+
   const openSheetDa = (status) => {
-    console.log("open shhet");
-    dispatch(openSheet(status));
+    console.log("opensheet ",status);
+    dispatch(setOpenSheet(status));
     dispatch(compSheet("Destinos"));
   };
 
@@ -97,7 +102,7 @@ function CarForm({ route}) {
 
   const openSheetCm = (status) => {
     console.log("open shhet");
-    dispatch(openSheet(status));
+    dispatch(setOpenSheet(status));
     dispatch(compSheet("Comentarios"));
   };
 
@@ -247,6 +252,7 @@ function CarForm({ route}) {
           </TouchableOpacity>
         </View>
         <View style={[styles.column, styles.secondColumn]}>
+          
           <TouchableOpacity
             style={{
               borderBottomWidth: 1,
@@ -266,17 +272,17 @@ function CarForm({ route}) {
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={[styles.column, styles.thirdColumn]}>
+        <View style={[styles.column, styles.thirdColumn,{borderBottomWidth: 1,borderColor: "#CCC"}]}>
+        {requisition.requisition.destinations.length > 0 &&
           <TouchableOpacity
             style={{
-              borderBottomWidth: 1,
-              borderColor: "#CCC",
               width: "100%",
               height: "100%",
               alignContent: "center",
               alignItems: "center",
               justifyContent: "center",
             }}
+            onPress={()=>setVisibleList({visible:true,type:'destinations'})}
           >
             <View
               style={{
@@ -288,6 +294,7 @@ function CarForm({ route}) {
               <Icon name="th-list" size={20} color="#FFF" />
             </View>
           </TouchableOpacity>
+        }
         </View>
       </View>
       <View style={[styles.row, styles.thirdRow]}>
@@ -363,7 +370,10 @@ function CarForm({ route}) {
         </View>
       </View>
     </View>
+
+
  <AddressSelector user={route.params.user} visible={visible.visible} typeSelector={visible.type} closeModal={()=>{setVisible({visible:false,type:'origin'})}}/>
+
 <PriceSelector visible={showTarifaModal} closeModal={()=>{setShowTarifaModal(false)}}/>
 
     </>
