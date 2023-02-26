@@ -45,7 +45,7 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
   useEffect(()=>{
 
     if(requisitionSelected){
-    console.log("Requi change",requisitionSelected)
+    //console.log("Requi change",requisitionSelected)
     }
   },[requisitionSelected])
 
@@ -176,7 +176,7 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
   };
 
   const onRegionChange = (newRegion) => {
-    console.log("region chance gps", newRegion);
+   // console.log("region chance gps", newRegion);
     obtenerUbicacion();
   };
 

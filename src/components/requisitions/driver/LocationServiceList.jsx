@@ -5,7 +5,7 @@ import { TouchableOpacity } from "react-native";
 
 import { useSelector } from "react-redux";
 import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
+
 
 import { connect } from "react-redux";
 const { height } = Dimensions.get("window");
@@ -33,7 +33,7 @@ const LocationServiceList = ({ navigation,socket }) => {
     //   { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
     // );
 
-    getLocation();
+   // getLocation();
   }, []);
 
   useEffect(() => {
@@ -63,18 +63,18 @@ const LocationServiceList = ({ navigation,socket }) => {
     //Alert.alert(item.key);
   };
 
-  const getLocation = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== "granted") {
-      console.log("Permission to access location was denied");
-      return;
-    }
+  // const getLocation = async () => {
+  //   let { status } = await Permissions.askAsync(Permissions.LOCATION);
+  //   if (status !== "granted") {
+  //     console.log("Permission to access location was denied");
+  //     return;
+  //   }
 
-    let location = await Location.getCurrentPositionAsync({});
-    const { longitude, latitude } = location.coords;
+  //   let location = await Location.getCurrentPositionAsync({});
+  //   const { longitude, latitude } = location.coords;
 
-    setRegion((prevRegion) => ({ ...prevRegion, latitude, longitude }));
-  };
+  //   setRegion((prevRegion) => ({ ...prevRegion, latitude, longitude }));
+  // };
 
   const renderItem = (item) => {
    

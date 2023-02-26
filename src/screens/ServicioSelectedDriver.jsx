@@ -21,15 +21,20 @@ export default function ServicioSelectedDriver(props) {
 
     useEffect(()=>{
 
+     if(props.route.params.requisition){ 
       console.log("requsition active ? ",props.route.params.requisition)
       if(requisition.status==='Abierta'){
         props.route.params.navigationExt.navigate("Principal")
       }
+    }
 
-    },[requisition])
+    },[requisition,props.route.params.requisition])
 
     useEffect(()=>{
-        console.log("change req status ",props.route.params.requisition.status)            
+        
+      
+      if(props.route.params.requisition){
+      console.log("change req status ",props.route.params.requisition.status)            
         if(requisitionNegotiate===null){
                 console.log("neg empty")
             setRequisition(props.route.params.requisition)
@@ -41,7 +46,8 @@ export default function ServicioSelectedDriver(props) {
             setRequisition(requisitionNegotiate)
         }   
 
-        
+      }
+      
     },[props.route.params.requisition,requisitionNegotiate])
 
 

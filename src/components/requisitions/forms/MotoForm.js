@@ -66,8 +66,8 @@ function CarForm({ store }) {
   };
 
   const showComments = (payload) => {
-    console.log("change type");
-    setTypeRequisition("Carro");
+   // console.log("change type");
+    setTypeRequisition("Moto");
     openSheetCm(true);
   };
 
@@ -103,7 +103,7 @@ function CarForm({ store }) {
 
   useEffect(() => {
     console.log("change type");
-    setTypeRequisition("Carro");
+    setTypeRequisition("Moto");
   }, []);
   return (
     <View title="CARD WITH DIVIDER">

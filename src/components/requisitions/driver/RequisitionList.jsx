@@ -19,11 +19,6 @@ const Tab = createMaterialTopTabNavigator();
 
 function MyTabs({navigationExt,socket}) {
   
-  useEffect(()=>{
-  
-
-  },[])
-  
   return (
     <Tab.Navigator tabBarPosition='top'>
       
@@ -59,7 +54,7 @@ const RequisitionList =({socket,store,navigation})=> {
       }
       
     
-    }, [])
+    }, [socket])
 
 
     return (

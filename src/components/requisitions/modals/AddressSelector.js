@@ -56,14 +56,17 @@ const AddressSelector = ({
   const data = [];
 
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+   
+    if(user !== undefined && AppMode === "client"){
+    
     (async () => {
       
       let { status } = await Location.requestForegroundPermissionsAsync();
-      //console.log("permiso ubicacion ",status)
+      console.log("permiso ubicacion ",status)
 
       if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
+    //    setErrorMsg('Permission to access location was denied');
         return;
       }
 
@@ -75,7 +78,7 @@ const AddressSelector = ({
       axios
         .get(url, {params:{ key: "AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s",latlng:locationF.coords.latitude.toString()+','+locationF.coords.longitude.toString() }})
         .then((response) => {
-        //    console.log("data rs ",response.data)
+        //   console.log("data rs ",response.data)
           const result = {
             title:response.data.results[0].address_components[1].short_name+' '+response.data.results[0].address_components[0].short_name+' '+response.data.results[0].address_components[2].short_name+' '+response.data.results[0].address_components[3].short_name+' '+response.data.results[0].address_components[4].short_name,
             coords:locationF.coords,
@@ -87,8 +90,8 @@ const AddressSelector = ({
       
         })
         .catch((error) => {
-//          handleMessage('An error occurred. Check your network and try again');
-          console.log(error.toJSON());
+          handleMessage('An error occurred. Check your network and try again');
+          console.log("Error en consulta places dir init");
         });
 
       
@@ -101,7 +104,7 @@ const AddressSelector = ({
       //console.log("permiso ubicacion ",status)
 
       if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
+      //  setErrorMsg('Permission to access location was denied');
         return;
       }
 
@@ -134,28 +137,30 @@ const AddressSelector = ({
     })();
 
     (async () => {
+     
+      console.log("AppMode "+AppMode) 
       
-      console.log("AppMode ",AppMode)
-
-    if(user && AppMode === "client"){
-    const endpoint = "http://api.agilenvio.co:2042/api/lastlocation";
-      
-    console.log("user",user)
-
+    const endpoint = "http://api.agilenvio.co:2042/api/solicitud/lastlocation";
+    console.log("user to last locations")  
+  
     const postData = {
       user: user._id 
     };
+
+    console.log("user id last loc ",user)
+  
+ 
 
     await fetch(endpoint, {
       method: "POST",
       body: JSON.stringify(postData),
       headers: {
         "Content-Type": "application/json",
-      },
+      }
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("last location ",data)  
+        console.log("last location ")  
         
         setMyLastLocation(data)
 
@@ -165,10 +170,14 @@ const AddressSelector = ({
   
 
 
-    }  
-    })();
     
-  }, [user,visible]);
+    })();
+ 
+ 
+  }
+
+
+  }, [user]);
 
 
   const DoSendMyLocation = ()=>{
@@ -321,7 +330,7 @@ const AddressSelector = ({
   };
 
   useEffect(()=>{
-    if(user){
+    if(user && AppMode === 'client'){
     console.log("cangando favoritos")
     load_favorites()  
     }
@@ -330,7 +339,9 @@ const AddressSelector = ({
   const load_favorites = async ()=>{
 
     // Send load user from API endpoint
-    const endpoint = "http://api.agilenvio.co:2042/api/obtener_favoritos";
+    
+    console.log("api get fav")
+    const endpoint = "http://api.agilenvio.co:2042/api/favoritos/obtenerFavoritos"; 
 
     const postData = {
       user: user._id

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 
 import RequisitionActive from "../components/requisitions/RequisitionActive";
@@ -6,6 +6,8 @@ import NewRequisition from "../components/requisitions/client/NewRequistion";
 import RequisitionList from "../components/requisitions/driver/RequisitionList";
 import Requisition from "../components/requisitions/client/Requisition"; 
 import DestinationsSheetModal from "../components/requisitions/modals/DestinationsSheetModal";
+import TerminarServicioDriver from "../components/requisitions/driver/terminarServicioDriver";
+import TerminarServicioCliente from "../components/requisitions/client/terminarServicioCliente";
 
 const PaginaPrincipal = ({
   offers,
@@ -13,16 +15,24 @@ const PaginaPrincipal = ({
   appMode,
   socket,
   navigation,
+  user
 }) => {
+  
+  const [requisitionLoad,setRequisitionLoad]=useState(null)
+  
   useEffect(() => {
-   //console.log("change requisition ",requisition)
-    
-  }, [requisition]);
+
+    if(user && requisition.status){
+        console.log("change requisition page principal "+user.tipo,requisition)
+        setRequisitionLoad(requisition)
+    }
+
+  }, [requisition,user]);
 
   return (
     <View>
-      {/* <Text>Estado : {requisition.status} </Text> 
-     <Text>Modo aplicacion {appMode && appMode}</Text> */}
+       {/* <Text>Estado : {requisitionLoad && requisitionLoad.status} </Text> 
+     <Text>Modo aplicacion {appMode && appMode}</Text>  */}
 
       {/* <Text>Elige un servicio</Text>
 
@@ -32,15 +42,18 @@ const PaginaPrincipal = ({
 
      <Text>Servicios de emergencia</Text> */}
 
-      {(requisition.status === "PENDING" || requisition.status === "Abierta") && <RequisitionActive offers={offers} socket={socket} requisition={requisition} />}
+      {user && requisitionLoad && socket !== null && (requisitionLoad.status === "PENDING" || requisitionLoad.status === "Abierta") && 
+        <RequisitionActive offers={offers} socket={socket} requisition={requisitionLoad} />
+      }
 
-      {appMode === "client" && requisition.status === "NEW" && (
+      
+      {user && requisitionLoad && socket !== null && appMode === "client" && requisitionLoad.status === "NEW" && (
         
 
         <Requisition socket={socket} navigation={navigation}/>
       )}
 
-      {appMode === "driver" && requisition.status === "NEW" && (
+      {user && requisitionLoad && socket !== null && appMode === "driver" && requisitionLoad.status === "NEW" && (
         <RequisitionList
           socket={socket}
           offers={offers}
@@ -48,7 +61,15 @@ const PaginaPrincipal = ({
         />
       )}
 
+
+      {user && socket !== null && appMode === "client" && requisitionLoad.status === "Cerrada" && 
+        <TerminarServicioCliente requisition={requisitionLoad}/>
+      }
    
+
+      {requisitionLoad !== null && user && socket !== null && appMode === "driver" && requisitionLoad.status === "Cerrada" && 
+        <TerminarServicioDriver requisition={requisitionLoad}/>
+      }
    
     </View>
   );

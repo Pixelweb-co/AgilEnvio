@@ -117,7 +117,6 @@ export default function Requisition({navigation }) {
 
 
   useEffect(()=>{
-      console.log("validate reducer data")
       let errors = 0;
       if(requisition.reducers.requisition.origin === null){
         errors += 1

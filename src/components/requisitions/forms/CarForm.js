@@ -47,7 +47,7 @@ function CarForm({ route}) {
     try {
       const value = await AsyncStorage.getItem("@ModalSheet");
 
-      console.log("from async storage ", value);
+      //console.log("from async storage ", value);
     } catch (e) {
       // saving error
     }
@@ -70,14 +70,14 @@ function CarForm({ route}) {
   };
 
   const showComments = (payload) => {
-    console.log("change type");
+    ///console.log("change type");
     setTypeRequisition("Carro");
     openSheetCm(true);
   };
 
   const setVisibleList = (payload) => {
     
-    console.log("list")
+    //console.log("list")
     openSheetDa(true);
   
     
@@ -111,7 +111,7 @@ function CarForm({ route}) {
 
   useEffect(() => {
 
-    console.log("User en CarForm ",route.params.user)    
+    //console.log("User en CarForm ",route.params.user)    
  
     setTypeRequisition("Carro");
 
@@ -220,10 +220,11 @@ function CarForm({ route}) {
               width: "100%",
               height: "100%",
               padding: 3,
+              justifyContent:"center"
             }}
             onPress={() => setVisible({ visible: true, type: "origin" })}
           >
-            <Text>
+            <Text style={{fontSize:15,fontWeight:"bold"}}>
               {requisition.requisition.origin
                 ? requisition.requisition.origin.title &&
                   requisition.requisition.origin.title === "initial"
@@ -259,11 +260,12 @@ function CarForm({ route}) {
               borderColor: "#CCC",
               width: "100%",
               height: "100%",
+              justifyContent:"center"
             }}
             onPress={()=>setVisible({visible:true,type:'destinations'})}
           >
-            <Text>
-              {requisition.requisition.destinations.length}{" "}
+            <Text style={{fontSize:15,fontWeight:"bold", paddingLeft:9}}>
+            {requisition.requisition.destinations.length >0 && "("+requisition.requisition.destinations.length+")"}{" "}
               {requisition.requisition.destinations.length > 0
                 ? requisition.requisition.destinations[
                     requisition.requisition.destinations.length - 1
@@ -321,10 +323,11 @@ function CarForm({ route}) {
               borderColor: "#CCC",
               width: "100%",
               height: "100%",
+              justifyContent:"center"
             }}
             onPress={()=>setShowTarifaModal(true)}
           >
-            <Text>
+            <Text style={{fontSize:15,fontWeight:"bold"}}>
               
               {requisition.requisition.tarifa.valor > 0 ? (
               <>
@@ -361,10 +364,11 @@ function CarForm({ route}) {
               borderColor: "#CCC",
               width: "100%",
               height: "100%",
+              justifyContent:"center"
             }}
             onPress={()=>showComments(true)}
           >
-            <Text>Deja comentarios para tener en cuenta</Text>
+            <Text style={{fontSize:15,fontWeight:"bold"}}>Deja comentarios para tener en cuenta</Text>
 
           </TouchableOpacity>
         </View>

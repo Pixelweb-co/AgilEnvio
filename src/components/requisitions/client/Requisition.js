@@ -128,7 +128,6 @@ export default function Requisition({ navigation, socket }) {
   };
 
   useEffect(() => {
-    console.log("validate reducer data");
     let errors = 0;
     if (requisition.reducers.requisition.origin === null) {
       errors += 1;
@@ -168,14 +167,9 @@ export default function Requisition({ navigation, socket }) {
         if (result !== null) {
           //  console.log("result crede from ",result)
           storedCredentials = JSON.parse(result);
-        } else {
-          storedCredentials = null;
-        }
-      })
-      .catch((error) => console.log(error));
-
-    const url = "http://api.agilenvio.co:2042/api/solicitudes";
-
+      
+      
+      
     const requisition_send = {
       ...requisition.reducers.requisition,
       status: "PENDING",
@@ -183,20 +177,19 @@ export default function Requisition({ navigation, socket }) {
       client_data: storedCredentials,
     };
 
-    //console.log("new to senf ",requisition_send)
-
-    await axios
-      .post(url, { requisition: requisition_send })
-      .then((response) => {
-        const result = response;
-        dispatch(setRequisition(result.data));
-        //console.log("FRom backend solicitud ",result.data)
+    //console.log("nueva ",requisition_send)
+    socket.emit("crear_solicitud_cliente",requisition_send)
+      
+        } else {
+          storedCredentials = null;
+        }
       })
-      .catch((error) => {
-        //          handleMessage('An error occurred. Check your network and try again');
-        console.log(error);
-      });
-  };
+      .catch((error) => console.log(error));
+  
+      
+  
+    }
+
 
   const onPlaceSelect = (place) => {
     handleAddDestination(place);
@@ -211,7 +204,7 @@ export default function Requisition({ navigation, socket }) {
   };
 
   useEffect(() => {
-    // console.log("socker requisition new ",socket)
+     console.log("socker requisition new ")
   }, [socket]);
 
   return (

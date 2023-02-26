@@ -146,18 +146,21 @@ const setLocationDriver = (location)=>{
         console.log("conectado socket...");
         socket.emit("solicitudPendiente", storedCredentials);
 
-        socket.on("seTsolicitud", function (sol, socketId) {
-       //     console.log("solicitud pendiente from socket : "+storedCredentials.tipo, sol);
 
+        //buscar solicitudes abiertas
+        socket.on("seTsolicitud", function (sol, socketId) {
+         
+          //console.log("solicitud pendiente from socket : "+storedCredentials.tipo, sol);
+          
           if (
             (sol.sol.status === "Abierta" || sol.sol.status === "PENDING") &&
             storedCredentials.tipo === "cliente"
           ) {
             //        console.log("solicitudes pendientes cliente join ")
-            socket.emit("joinRequisition", {
-              requisitionId: sol.sol._id,
-              contratante: storedCredentials._id,
-            });
+            // socket.emit("joinRequisition", {
+            //   requisitionId: sol.sol._id,
+            //   contratante: storedCredentials._id,
+            // });
           }
 
           if (
@@ -165,12 +168,13 @@ const setLocationDriver = (location)=>{
             storedCredentials.tipo === "contratista"
           ) {
             //        console.log("solicitudes pendientes cliente join ")
-            socket.emit("joinRequisition", {
-              requisitionId: sol.sol._id,
-              contratista: storedCredentials._id,
-            });
+            // socket.emit("joinRequisition", {
+            //   requisitionId: sol.sol._id,
+            //   contratista: storedCredentials._id,
+            // });
           }
-        //  console.log("sol antes "+storedCredentials.tipo,sol.sol)
+          console.log("sol antes de enviar a redux "+storedCredentials.tipo,sol.sol)
+          
           setSolicitud(sol.sol);
 
           //console.log("ofertas ",sol.offers)
@@ -181,7 +185,7 @@ const setLocationDriver = (location)=>{
 
         socket.on("solicitudes_abiertas", function (solicitudes, socketId) {
           if (store.appMode === "driver") {
-            console.log("soles sockets "+store.appMode,solicitudes)
+          //  console.log("soles sockets "+store.appMode,solicitudes)
             setDriverListServices(solicitudes);
           }
         });
@@ -212,7 +216,8 @@ const setLocationDriver = (location)=>{
 
       socket.on("offerAccept",function(data,socketId){
         
-        console.log("oferta Aceptada ",data)
+
+        console.log("oferta Aceptada "+storedCredentials.tipo,data)
         
         if(storedCredentials.tipo=="cliente"){
           Alert.alert(
@@ -233,10 +238,7 @@ const setLocationDriver = (location)=>{
         if(storedCredentials.tipo==="contratista"){
 
           if(data.offer.contratista === storedCredentials._id){
-          
-          //  setScreenDefault("Principal")
-
-
+        
             Alert.alert(
             "Han aprobado su oferta",
             "Dirijase al punto de recojida",
@@ -252,15 +254,16 @@ const setLocationDriver = (location)=>{
         
       }
 
-console.log("trayendo sol nueva ",storedCredentials.tipo)
-        socket.emit("solicitudPendiente", storedCredentials);
-        
+//console.log("trayendo sol nueva ",storedCredentials.tipo)
+      //  socket.emit("solicitudPendiente", storedCredentials);
+      setSolicitud(data.sol);
+  
+
       })
 
       socket.on("terminateService",(data)=>{
-
-        console.log("servicioTerminado ",storedCredentials.tipo)
-        socket.emit("solicitudPendiente", storedCredentials);
+        console.log("servicioTerminado "+storedCredentials.tipo+' ',data.sol)
+      setSolicitud(data.sol);
         
       })
 
@@ -314,6 +317,7 @@ console.log("trayendo sol nueva ",storedCredentials.tipo)
       <Drawer.Screen name="Micuenta" component={MiCuenta} />
       <Drawer.Screen name="Configuración" component={Configuracion} />
       <Drawer.Screen name="Servicio" component={ServicioSelectedDriver} />
+      
     </Drawer.Navigator>
   );
 };

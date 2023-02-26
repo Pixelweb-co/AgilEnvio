@@ -57,7 +57,15 @@ export default function RequisitionActive({ requisition, offers, socket }) {
     setRequisitionSl(requisition);
   }, [requisition]);
 
+
+
   const AcceptRequisition = async (offer) => {
+    //console.log("accept ", offer);
+    socket.emit("aceptar_solicitud_driver_oferta",offer)
+
+  }
+
+  const AcceptRequisition2 = async (offer) => {
     //console.log("accept ", offer);
 
     const url = "http://api.agilenvio.co:2042/api/aceptar_solicitud";
@@ -79,16 +87,24 @@ export default function RequisitionActive({ requisition, offers, socket }) {
       //  console.log("Result solicitud ", data);
         if (data.result === "SUCCESS") {
 
-        //  console.log("from backend active sol ",data.solicitud)
+          console.log("from backend active sol ",data)
           //alert("chg ",data.solicitud.status)
-          requisitionActiveNow(data.solicitud,data.offer)
+//          requisitionActiveNow(data.solicitud,data.offer)
         }
 
       })
       .catch(error => console.error(error));
   };
 
-  const terminateRequisition = async()=>{
+
+  const terminateRequisition = async () => {
+
+    console.log("terminando servicio")
+    socket.emit("terminar_soliitud",requisition)
+
+  }
+
+  const terminateRequisition2 = async()=>{
 
 
     const url = 'http://api.agilenvio.co:2042/api/terminar_solicitud';

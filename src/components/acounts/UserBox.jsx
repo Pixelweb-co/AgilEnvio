@@ -13,7 +13,6 @@ export default function UserBox({requisition}) {
     const getUser = async (requisition) => {
 
      
-        console.log("get user state")
         let postData = {type:AppMode,user_id:null}
 
       if(AppMode==='driver'){
@@ -26,33 +25,47 @@ export default function UserBox({requisition}) {
 
 
 // Send load user from API endpoint
-      const endpoint = 'http://api.agilenvio.co:2042/api/getuser';
+      const endpoint = 'http://api.agilenvio.co:2042/api';
       
-      fetch(endpoint, {
-        method: 'POST',
-        body: JSON.stringify(postData),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        setUserData(data)
-      })
-      .catch(error => console.error(error));
+      
+      const userId = postData.user_id; // Aquí debes insertar el ID del usuario que deseas obtener
+       console.log("user get ",postData.user_id)
+      fetch(`${endpoint}/usuarios/${userId}`)
+        .then(response => { 
+         // console.log("Res user from back ",response) 
+          if (!response.ok) {
+            throw new Error('Error al obtener el usuario ',response.status); 
+          }
+          return response.json(); 
+        }) 
+        .then(usuario => {
+          //console.log("user from back", usuario);
+          setUserData(usuario)
+        })
+        .catch(error => {
+          console.error(error);
+        });
+      
 
 
 
     }
 
+    if(requisition.id_client && requisition.id_driver){
     getUser(requisition)
+    }
     
 
-  },[])
+  },[requisition])
   
   
   
   return (
+    
+    <React.Fragment>
+      {requisition.status === 'Abierta' &&
+      
+      
     <View
     
     style={{
@@ -124,5 +137,9 @@ export default function UserBox({requisition}) {
       </View>
     </View>
   </View>
+}
+
+</React.Fragment>
+
   );
 }
