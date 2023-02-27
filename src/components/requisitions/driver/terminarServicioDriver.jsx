@@ -4,7 +4,7 @@ import { Rating, AirbnbRating } from 'react-native-ratings';
 import { useSelector,useDispatch } from 'react-redux';
 import {setRequisition,setOffers} from '../../../reducers/actions/RequsitionActions'
 
-const TerminarServicioDriver = ({ requisition }) => {
+const TerminarServicioDriver = ({ requisition,user }) => {
   
   const dispatch = useDispatch(); 
 
@@ -14,7 +14,27 @@ const TerminarServicioDriver = ({ requisition }) => {
     
   },[])
 
-  const doCalificarServicio = ()=>{
+  const doCalificarServicio = (rating)=>{
+
+
+    // Send login data to API endpoint
+    const endpoint = 'http://api.agilenvio.co:2042/api/rating/setrating';
+    
+    fetch(endpoint, {
+      method: 'POST',
+      body: JSON.stringify({
+        solicitud:requisition._id,
+        tipo:user.tipo,
+        user:user._id,
+        calificacion:rating
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+
 
     dispatch(setRequisition({
       id:null,
@@ -26,10 +46,15 @@ const TerminarServicioDriver = ({ requisition }) => {
       status:"NEW",
       tarifa:{valor:0,formaPago:"efectivo"},
       type:null,
-      comments:{notes:"",serviceTypeOptions:null}
+      comments:{notes:"",serviceTypeOptions:null},
+      ratedClient:null,
+      ratedDriver:null
     }))
 
     dispatch(setOffers([]))
+
+    })
+    .catch(error => console.error(error));
 
   }
 

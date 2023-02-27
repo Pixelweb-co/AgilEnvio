@@ -14,7 +14,9 @@ const initialState = {
       status:"NEW",
       tarifa:{valor:0,formaPago:"efectivo"},
       type:null,
-      comments:{notes:"",serviceTypeOptions:null}
+      comments:{notes:"",serviceTypeOptions:null},
+      ratedClient:null,
+      ratedDriver:null
     },
     offers:[],
     requisitionListPending:[],

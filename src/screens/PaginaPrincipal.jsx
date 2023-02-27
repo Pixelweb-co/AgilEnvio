@@ -32,7 +32,7 @@ const PaginaPrincipal = ({
   return (
     <View>
        {/* <Text>Estado : {requisitionLoad && requisitionLoad.status} </Text> 
-     <Text>Modo aplicacion {appMode && appMode}</Text>  */}
+     <Text>Modo aplicacion {appMode && appMode}</Text>   */}
 
       {/* <Text>Elige un servicio</Text>
 
@@ -62,13 +62,13 @@ const PaginaPrincipal = ({
       )}
 
 
-      {user && socket !== null && appMode === "client" && requisitionLoad.status === "Cerrada" && 
-        <TerminarServicioCliente requisition={requisitionLoad}/>
+      {user && socket !== null && appMode === "client" && requisitionLoad.ratedClient !== "rated" && requisitionLoad.status === "Cerrada" && 
+        <TerminarServicioCliente user={user} requisition={requisitionLoad}/>
       }
    
 
-      {requisitionLoad !== null && user && socket !== null && appMode === "driver" && requisitionLoad.status === "Cerrada" && 
-        <TerminarServicioDriver requisition={requisitionLoad}/>
+      {user && requisitionLoad !== null && user && socket !== null && appMode === "driver" && requisitionLoad.ratedDriver !== "rated" && requisitionLoad.status === "Cerrada" && 
+        <TerminarServicioDriver user={user} requisition={requisitionLoad}/>
       }
    
     </View>
