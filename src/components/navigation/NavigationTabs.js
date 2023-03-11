@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text,Image } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import CarForm from "../requisitions/forms/CarForm";
 import MotoForm from "../requisitions/forms/MotoForm";
@@ -16,20 +16,22 @@ export default function NavigationTabs({ store,user }) {
   }, []);
   return (
     <Tab.Navigator
-      screenOptions={{ tabBarScrollEnabled: true }}
-      style={{ paddingTop: StatusBar.currentHeight }}
+      screenOptions={{ tabBarScrollEnabled: true,tabBarItemStyle: { width: 100 } }}
+      style={{paddingTop: StatusBar.currentHeight }}
       onTabPress={() => {
-        console.log("tabpress");
+        console.log("tabpress"); 
       }}
     >
       <Tab.Screen
         options={{
           title: ({ color, focused }) => (
-            <Ionicons
-              size={25}
-              name={focused ? "home" : "home-outline"}
-              color={focused ? "blue" : "#272727"}
-            />
+            <View style={{alignContent:"center",alignItems:"center",borderRadius: 5,borderWidth:(focused ? 1 : 0),borderColor:"#CCC", backgroundColor:(focused ? "#AF9" : "white"),paddingLeft:15,paddingRight:15}}>
+            <Image
+        source={require("../../../assets/img/sportive-car.png")}
+        style={{ width: 45, height: 45 }}
+      />
+      <Text>Carro</Text>
+      </View>
           ),
         }}
         component={CarForm}
@@ -39,54 +41,51 @@ export default function NavigationTabs({ store,user }) {
       <Tab.Screen
         options={{
           title: ({ color, focused }) => (
-            <Ionicons
-              size={25}
-              name={focused ? "people-sharp" : "people-outline"}
-              color={focused ? "blue" : "#272727"}
-            />
+            <View style={{alignContent:"center",alignItems:"center",borderRadius: 5,borderWidth:(focused ? 1 : 0),borderColor:"#CCC", backgroundColor:(focused ? "#AF9" : "white"),paddingLeft:15,paddingRight:15}}>
+            <Image
+        source={require("../../../assets/img/motorbike.png")}
+        style={{ width: 45, height: 45 }}
+      />
+      <Text>Moto</Text>
+      </View>
           ),
         }}
         component={MotoForm}
+        initialParams={{ store: store,user:user }}
         name="Moto"
       />
       <Tab.Screen
         options={{
           title: ({ color, focused }) => (
-            <Ionicons
-              size={25}
-              name={focused ? "people-sharp" : "people-outline"}
-              color={focused ? "blue" : "#272727"}
-            />
+            <View style={{alignContent:"center",alignItems:"center",borderRadius: 5,borderWidth:(focused ? 1 : 0),borderColor:"#CCC", backgroundColor:(focused ? "#AF9" : "white"),paddingLeft:15,paddingRight:15}}>
+            <Image
+        source={require("../../../assets/img/box.png")}
+        style={{ width: 45, height: 45 }}
+      />
+      <Text>Paquete</Text>
+      </View>
           ),
         }}
         component={PaqueteForm}
+        initialParams={{ store: store,user:user }}
         name="Paquete"
       />
+
       <Tab.Screen
         options={{
           title: ({ color, focused }) => (
-            <Ionicons
-              size={25}
-              name={focused ? "people-sharp" : "people-outline"}
-              color={focused ? "blue" : "#272727"}
-            />
-          ),
-        }}
-        component={PaqueteForm}
-        name="Grua"
+            <View style={{alignContent:"center",alignItems:"center",borderRadius: 5,borderWidth:(focused ? 1 : 0),borderColor:"#CCC", backgroundColor:(focused ? "#AF9" : "white"),paddingLeft:15,paddingRight:15}}>
+            <Image
+        source={require("../../../assets/img/camion-grua.png")}
+        style={{ width: 45, height: 45 }}
       />
-      <Tab.Screen
-        options={{
-          title: ({ color, focused }) => (
-            <Ionicons
-              size={25}
-              name={focused ? "people-sharp" : "people-outline"}
-              color={focused ? "blue" : "#272727"}
-            />
+      <Text>Grua</Text>
+      </View>
           ),
         }}
         component={PaqueteForm}
-        name="Compras"
+        initialParams={{ store: store,user:user }}
+        name="Grua"
       />
     </Tab.Navigator>
   );

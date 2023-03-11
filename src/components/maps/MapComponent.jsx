@@ -4,9 +4,14 @@ import MapView, { Marker, Polyline } from "react-native-maps";
 import { useSelector } from "react-redux";
 import * as Location from "expo-location";
 import Animated from 'react-native-reanimated';
+import MapViewDirections from "react-native-maps-directions";
+
+import {GoogleKey} from "@env";
+
 
 import { PermissionsAndroid } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import ActivityIndicador from "../requisitions/UiModules/ActivityIndicator";
 
 const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
   const [showOrigin, setShowOrigin] = useState(true);
@@ -38,7 +43,7 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
     setInterval(()=>{
       obtenerUbicacion();
 
-    },15000)
+    },10000)
 
   }, []);
 
@@ -183,7 +188,7 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
   return (
     <View style={styles.container}>
             
-      {region && (
+      {region ? (
         <MapView
           ref={(map) => {
             MapD = map;
@@ -222,6 +227,16 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
               );
             })}
 
+        {(type === "viewDriver" || type === "viewNew") && requisitionSelected.origin.coords && 
+         <MapViewDirections 
+            origin={requisitionSelected.origin.coords}
+            destination={requisitionSelected.destinations[requisitionSelected.destinations.length-1].coords}
+            apikey={GoogleKey}
+            strokeColor="blue"
+            strokeWidth={2}
+          />
+        }
+         
           {(type === "viewDriver" || type === "viewNew") && requisitionSelected.origin.coords && (
             <Marker.Animated
               ref={(marker) => {
@@ -260,7 +275,7 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
           <Polyline
           key={index}
           coordinates={trace}
-          strokeColor="blue" // fallback for when `strokeColors` is not supported by the map-provider
+          strokeColor="pink" // fallback for when `strokeColors` is not supported by the map-provider
           strokeColors={['#7F0000']}
           strokeWidth={3}
         />        )
@@ -278,14 +293,14 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
                   requisitionSelected.origin.coords,
                   requisitionSelected.destinations[0].coords,
                 ]}
-                strokeColor="blue" // fallback for when `strokeColors` is not supported by the map-provider
+                strokeColor="pink" // fallback for when `strokeColors` is not supported by the map-provider
                 strokeColors={["#7F0000"]}
-                strokeWidth={3}
+                strokeWidth={5}
               />
             )}
 
           {/* marcador driver       */}
-          {locationDriver !== null && requisitionSelected.status==="abierta" &&       
+          {locationDriver !== null && requisitionSelected.status==="Abierta" &&       
           <Marker.Animated coordinate={locationDriver}>
             <View
               style={{
@@ -297,9 +312,14 @@ const MapComponent = ({ navigation, type, requisitionSelected,socket }) => {
           </Marker.Animated>
         }
         </MapView>
+      ) : (
+        <ActivityIndicador text={("Cargando ubicacion ...")}/>
       )}
 
       <View>
+        
+
+
         <Text>
           <TouchableOpacity onPress={() => obtenerUbicacion()}>
             <Text>Actualizar ubicacion</Text>

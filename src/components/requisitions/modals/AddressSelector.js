@@ -13,7 +13,7 @@ import {
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import FavoritesCard from "../UiModules/FavoritesCard";
 import AddAddressCard from "../UiModules/AddAddressCard";
-
+import {GoogleKey} from "@env";
 
 import * as Location from "expo-location";
 import axios from "axios";
@@ -76,9 +76,13 @@ const AddressSelector = ({
       
       const url = 'https://maps.googleapis.com/maps/api/geocode/json?';
       axios
-        .get(url, {params:{ key: "AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s",latlng:locationF.coords.latitude.toString()+','+locationF.coords.longitude.toString() }})
+        .get(url, {params:{ key: GoogleKey,latlng:locationF.coords.latitude.toString()+','+locationF.coords.longitude.toString() }})
         .then((response) => {
-        //   console.log("data rs ",response.data)
+        if(response.data.error_message){
+
+        console.log("data rs ",response.data)
+
+        }
           const result = {
             title:response.data.results[0].address_components[1].short_name+' '+response.data.results[0].address_components[0].short_name+' '+response.data.results[0].address_components[2].short_name+' '+response.data.results[0].address_components[3].short_name+' '+response.data.results[0].address_components[4].short_name,
             coords:locationF.coords,
@@ -90,7 +94,7 @@ const AddressSelector = ({
       
         })
         .catch((error) => {
-          handleMessage('An error occurred. Check your network and try again');
+         // handleMessage('An error occurred. Check your network and try again');
           console.log("Error en consulta places dir init");
         });
 
@@ -114,7 +118,7 @@ const AddressSelector = ({
       
       const url = 'https://maps.googleapis.com/maps/api/geocode/json?';
       axios
-        .get(url, {params:{ key: "AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s",latlng:locationF.coords.latitude.toString()+','+locationF.coords.longitude.toString() }})
+        .get(url, {params:{ key: GoogleKey,latlng:locationF.coords.latitude.toString()+','+locationF.coords.longitude.toString() }})
         .then((response) => {
         //    console.log("data rs ",response.data)
           const result = {
@@ -129,7 +133,7 @@ const AddressSelector = ({
         })
         .catch((error) => {
 //          handleMessage('An error occurred. Check your network and try again');
-          console.log(error.toJSON());
+          console.log(error);
         });
 
       
@@ -451,9 +455,11 @@ const AddressSelector = ({
             }}
           />
         </TouchableOpacity>
+
+
         {!showFavorites && !showAddressAdd && !mapPicker && (
           <View style={autoCompleteStyles.titleContainer}>
-            <Text>Selecciona una direcciòn</Text>
+            <Text style={{fontSize:20,fontWeight:"bold"}}>Selecciona una direcciòn</Text>
           </View>
         )}
 
@@ -517,7 +523,7 @@ const AddressSelector = ({
 
                     DoSendAddress(search.destination, search.place);
                   } else {
-                    console.log("no exs ", search);
+                   // console.log("no exs ", search);
                     setOptionSet("work");
                     setAddressAdd(true);
                   }
@@ -536,7 +542,7 @@ const AddressSelector = ({
                   if (search) {
                     DoSendAddress(search.destination, search.place);
                   } else {
-                    console.log("no exs ", search);
+                //    console.log("no exs ", search);
                     setOptionSet("study");
                     setAddressAdd(true);
                   }
@@ -557,7 +563,7 @@ const AddressSelector = ({
                   if (search) {
                     DoSendAddress(search.destination, search.place);
                   } else {
-                    console.log("no exs ", search);
+            //        console.log("no exs ", search);
                     setOptionSet("home");
                     setAddressAdd(true);
                   }
@@ -582,13 +588,7 @@ const AddressSelector = ({
           </View>
         )}
 
-        {showFavorites && !showAddressAdd && !mapPicker && (
-          <FavoritesCard
-            user={user}
-            closeFavorities={() => setShowFavorites(false)}
-          />
-        )}
- 
+        
         {showAddressAdd && !showFavorites && !mapPicker && (
           <AddAddressCard
             user={user}
@@ -597,6 +597,16 @@ const AddressSelector = ({
             setAddress={handleAddDestination}
           />
         )}
+        
+        
+        {showFavorites && !showAddressAdd && !mapPicker && (
+          <FavoritesCard
+            user={user}
+            closeFavorities={() => setShowFavorites(false)}
+          />
+        )}
+ 
+        
       
         {!showAddressAdd && !showFavorites && mapPicker && (
           

@@ -70,6 +70,7 @@ const AppNavigator = ({ store }) => {
   const [storedCredentials, setStoredCredentials] = useState(null);
   const [socket, setSocket] = useState(null);
   const [screenDefault, setScreenDefault] = useState("Principal")
+  const [defaultScreen,setDefaultScreen] = useState("Principal")
 
   const dispatch = useDispatch();
 
@@ -109,7 +110,66 @@ const setLocationDriver = (location)=>{
     };
 
     checkLoginCredentials();
+
+
+
+
   }, []);
+
+  useEffect(()=>{
+
+
+
+    if(store.appMode === "client"){
+
+      if(store.requisition.status === "NEW"){
+        
+        setScreenDefault('Nuevo Servicio')   
+        
+      } 
+
+    if(store.requisition.status === "PENDING"){
+      
+    setScreenDefault('Servicio en espera de ofertas')    
+    
+    }
+
+    if(store.requisition.status === "Abierta"){
+
+      setScreenDefault('Servicio en Curso')
+
+    }
+
+
+    if(store.requisition.status === "Cerrada"){
+
+      setScreenDefault('Servicio Terminado')
+      
+    }
+
+    }
+    
+      
+    
+    if(store.appMode === "driver" && store.requisition.status === "NEW"){
+
+      setScreenDefault('Listado de servicios')
+
+    }
+
+    if(store.appMode === "driver" && store.requisition.status === "Abierta"){
+
+      setScreenDefault('Servicio en Curso')
+
+    }
+
+    if(store.appMode === "driver" && store.requisition.status === "Cerrada"){
+
+      setScreenDefault('Servicio Terminado')
+
+    }
+
+  },[store.requisition.status])
 
   useEffect(() => {
     if (storedCredentials !== null) {
@@ -128,7 +188,7 @@ const setLocationDriver = (location)=>{
 
       console.log("Connect to socket ");
 
-      const socketConnection = io.connect("http://api.agilenvio.co:2042", {
+      const socketConnection = io.connect("http://181.205.220.122:4488/socket", { 
         query: {
           tipo: storedCredentials.tipo,
           cliente: storedCredentials._id,
@@ -141,9 +201,16 @@ const setLocationDriver = (location)=>{
   }, [storedCredentials]);
 
   useEffect(() => {
+    console.log("socket load ",socket)
     if (socket !== null) {
       socket.on("connect", () => {
         console.log("conectado socket...");
+
+        // Enviar un mensaje al servidor cada 30 segundos
+            setInterval(() => {
+              socket.emit('keep-alive');
+            }, 25000);
+
         socket.emit("solicitudPendiente", storedCredentials);
 
 
@@ -156,11 +223,11 @@ const setLocationDriver = (location)=>{
             (sol.sol.status === "Abierta" || sol.sol.status === "PENDING") &&
             storedCredentials.tipo === "cliente"
           ) {
-            //        console.log("solicitudes pendientes cliente join ")
-            // socket.emit("joinRequisition", {
-            //   requisitionId: sol.sol._id,
-            //   contratante: storedCredentials._id,
-            // });
+                   console.log("solicitudes pendientes cliente join ")
+            socket.emit("joinRequisition", {
+              requisitionId: sol.sol._id,
+              contratante: storedCredentials._id,
+            }); 
           }
 
           if (
@@ -191,7 +258,7 @@ const setLocationDriver = (location)=>{
         });
 
         socket.on("seToffers", function (data, socketId) {
-         // Alert.alert("Notificacion","Han ofertado su servicio.") 
+          //Alert.alert("Notificacion","Han ofertado su servicio.") 
           setReduxOffers(data.offers);
         });
 
@@ -269,7 +336,7 @@ const setLocationDriver = (location)=>{
 
       if(storedCredentials.tipo === 'cliente'){
         socket.on("locationDriverLoad",(location,socketId)=>{
-        //console.log("location recive driver",location)
+        console.log("location recive driver",location)
         if(location){  
         setLocationDriver(location)
         }  
@@ -298,8 +365,19 @@ const setLocationDriver = (location)=>{
   };
 
   return (
-    <Drawer.Navigator initialRouteName={screenDefault} drawerContent={(props) => <Menu {...props} />}>
-      <Drawer.Screen name="Principal">
+    <Drawer.Navigator
+     initialRouteName={defaultScreen}
+     drawerContent={(props) => <Menu {...props} />}
+     >
+      <Drawer.Screen name="Principal"
+      options={{
+        title: screenDefault,
+        headerStyle: {
+              backgroundColor: 'royalblue'
+           },
+        headerTintColor:"white"     
+       }}
+      >
         {(props) => {
           return (
             <PaginaPrincipal

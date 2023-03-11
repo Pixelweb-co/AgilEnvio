@@ -63,7 +63,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#CCC',
         paddingTop:5,
-        paddingBottom:5
+        paddingBottom:5,
+        backgroundColor:"#FFF",
+        margin:8,
+        borderRadius:15,
+        elevation:2,
+        borderWidth:1,
+        borderColor:"orange"
     },
       row: {
         flex: 1,
@@ -74,7 +80,7 @@ const styles = StyleSheet.create({
         borderColor: '#000',
       },
       textDestination:{
-        fontSize:14,
+        fontSize:15,
         color:"blue",
         fontWeight:"bold"
       }

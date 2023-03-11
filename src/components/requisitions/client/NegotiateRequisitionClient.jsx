@@ -12,6 +12,7 @@ const NegotiateRequisitionClient = ({ requisition, driver,socket }) => {
   const [ValorOfecido, setValorOfrecido] = useState(0);
   const [storedCredentials, setStoredCredentials] = useState(null);
   const storeData = useSelector((store) => store);
+  const offers = useSelector((store) => store.reducers.offers)
 
   useEffect(() => {
     setValorOfrecido(parseInt(requisition.tarifa.valor) + 500);
@@ -68,7 +69,7 @@ const NegotiateRequisitionClient = ({ requisition, driver,socket }) => {
           <TouchableOpacity
             style={styles.button3}
             onPress={() => {
-              if (ValorOfecido >= parseInt(requisition.tarifa.valor) ) {
+              if (ValorOfecido >= parseInt(requisition.tarifa.valor && offers.length === 0) ) {
                 setValorOfrecido(ValorOfecido + 500);
               }
             }}
@@ -79,7 +80,12 @@ const NegotiateRequisitionClient = ({ requisition, driver,socket }) => {
       </View>
       <View style={styles.row}>
         <View style={styles.singleColumn}>
-          <TouchableOpacity style={styles.button} onPress={ofrecerTarfifa}>
+          <TouchableOpacity style={styles.button} onPress={()=>{
+            if(offers.length === 0){
+            ofrecerTarfifa()
+            }
+            
+            }}>
             <Text style={styles.buttonText}>Ofrecer Tarifa</Text>
           </TouchableOpacity>
         </View>

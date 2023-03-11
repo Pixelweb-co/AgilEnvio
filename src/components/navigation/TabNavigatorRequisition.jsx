@@ -60,14 +60,10 @@ export default TabNavigator = () => {
       }}
       initialRouteName="Home"
     >
-      <Tab.Screen name="Home" component={CarForm} />
-      <Tab.Screen name="Search" component={CarForm} />
-      <Tab.Screen name="Cart" component={CarForm } />
-      <Tab.Screen name="Profile" component={CarForm } />
-      <Tab.Screen name="Settings" component={CarForm} />
-      <Tab.Screen name="Notifications" component={CarForm} />
-      <Tab.Screen name="Favorites" component={CarForm} />
-      <Tab.Screen name="Messages" component={CarForm} />
+      <Tab.Screen name="Carro" component={CarForm} />
+      <Tab.Screen name="Moto" component={CarForm} />
+      <Tab.Screen name="Paquete" component={CarForm } />
+      
     </Tab.Navigator>
   );
 };
