@@ -144,7 +144,7 @@ const AddressSelector = ({
      
       console.log("AppMode "+AppMode) 
       
-    const endpoint = "http://api.agilenvio.co:2042/api/solicitud/lastlocation";
+    const endpoint = "http://192.168.0.2:4488/api/solicitud/lastlocation";
     console.log("user to last locations")  
   
     const postData = {
@@ -345,7 +345,7 @@ const AddressSelector = ({
     // Send load user from API endpoint
     
     console.log("api get fav")
-    const endpoint = "http://api.agilenvio.co:2042/api/favoritos/obtenerFavoritos"; 
+    const endpoint = "http://192.168.0.2:4488/api/favoritos/obtenerFavoritos"; 
 
     const postData = {
       user: user._id
@@ -375,7 +375,7 @@ const AddressSelector = ({
     console.log("save ", optionSet);
 
     // Send load user from API endpoint
-    const endpoint = "http://api.agilenvio.co:2042/api/setfavorite";
+    const endpoint = "http://192.168.0.2:4488/api/setfavorite";
 
     const postData = {
       user: user._id,

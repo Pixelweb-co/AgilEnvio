@@ -44,7 +44,7 @@ const OffersList = ({offersList,onSelect}) => {
         >
           <Image
             source={{
-              uri: "http://api.agilenvio.co:2042/uploads/noPhoto.jpg",
+              uri: "http://192.168.0.2:4488/uploads/noPhoto.jpg",
             }}
             style={{ elevation:3,width: 55, height: 55, borderRadius: 25 }}
           />

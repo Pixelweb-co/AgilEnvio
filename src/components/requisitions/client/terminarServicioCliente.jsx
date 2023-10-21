@@ -15,7 +15,7 @@ const TerminarServicioCliente = ({ requisition,user }) => {
 
 
     // Send login data to API endpoint
-    const endpoint = 'http://api.agilenvio.co:2042/api/rating/setrating';
+    const endpoint = 'http://192.168.0.2:4488/api/rating/setrating';
     
     fetch(endpoint, {
       method: 'POST',

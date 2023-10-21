@@ -184,7 +184,7 @@ export default function Requisition({navigation }) {
  /*    (async ()=>{
       try {
         
-        const url = 'http://api.agilenvio.co:2042/api/solicitudes_user';
+        const url = 'http://192.168.0.2:4488/api/solicitudes_user';
         await axios
           .post(url,{status:"PENDING",id_client:storedCredentials._id})
           .then((response) => { 
@@ -280,7 +280,7 @@ export default function Requisition({navigation }) {
     })
     .catch((error) => console.log(error));
 
-    const url = 'http://api.agilenvio.co:2042/api/solicitudes';
+    const url = 'http://192.168.0.2:4488/api/solicitudes';
 
     const requisition_send = {...requisition.reducers.requisition,status:"PENDING",id_client:storedCredentials._id,client_data:storedCredentials}
 

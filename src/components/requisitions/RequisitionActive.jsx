@@ -177,7 +177,7 @@ export default function RequisitionActive({ requisition, offers, socket }) {
                         >
                           <Image
                             source={{
-                              uri: "http://api.agilenvio.co:2042/uploads/noPhoto.jpg",
+                              uri: "http://192.168.0.2:4488/uploads/noPhoto.jpg",
                             }}
                             style={{ width: 50, height: 50, borderRadius: 25 }}
                           />

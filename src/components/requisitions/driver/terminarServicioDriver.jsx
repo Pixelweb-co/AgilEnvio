@@ -18,7 +18,7 @@ const TerminarServicioDriver = ({ requisition,user }) => {
 
 
     // Send login data to API endpoint
-    const endpoint = 'http://api.agilenvio.co:2042/api/rating/setrating';
+    const endpoint = 'http://192.168.0.2:4488/api/rating/setrating';
     
     fetch(endpoint, {
       method: 'POST',
@@ -73,7 +73,7 @@ const TerminarServicioDriver = ({ requisition,user }) => {
               
       <Image
         source={{
-          uri: "http://api.agilenvio.co:2042/uploads/noPhoto.jpg",
+          uri: "http://192.168.0.2:4488/uploads/noPhoto.jpg",
         }}
         style={{ width: 75, height: 75, borderRadius: 25 }}
       />

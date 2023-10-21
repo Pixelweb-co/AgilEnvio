@@ -57,7 +57,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
       }
   
       // Send login data to API endpoint
-      const endpoint = 'http://api.agilenvio.co:2042/auth/login';
+      const endpoint = 'http://192.168.0.2:4488/auth/login';
       const data = { email, password };
       fetch(endpoint, {
         method: 'POST',

@@ -25,7 +25,7 @@ export default function UserBox({requisition}) {
 
 
 // Send load user from API endpoint
-      const endpoint = 'http://api.agilenvio.co:2042/api';
+      const endpoint = 'http://192.168.0.2:4488/api';
       
       
       const userId = postData.user_id; // Aquí debes insertar el ID del usuario que deseas obtener
@@ -85,7 +85,7 @@ export default function UserBox({requisition}) {
     >
       <Image
         source={{
-          uri: "http://api.agilenvio.co:2042/uploads/noPhoto.jpg",
+          uri: "http://192.168.0.2:4488/uploads/noPhoto.jpg",
         }}
         style={{ width: 50, height: 50, borderRadius: 25 }}
       />

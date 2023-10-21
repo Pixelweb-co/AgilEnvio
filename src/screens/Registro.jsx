@@ -13,7 +13,7 @@ const Registro = () => {
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
   const validatePhone = async () => {
-    const response = await fetch('http://api.agilenvio.co:2042/api/check_telefono', {
+    const response = await fetch('http://192.168.0.2:4488/api/check_telefono', {
       method: 'POST',
       body: JSON.stringify({ telefono: phone }),
       headers: {
@@ -29,7 +29,7 @@ const Registro = () => {
   };
 
   const validateEmail = async () => {
-    const response = await fetch('http://api.agilenvio.co:2042/api/check_email', {
+    const response = await fetch('http://192.168.0.2:4488/api/check_email', {
       method: 'POST',
       body: JSON.stringify({ email }),
       headers: {
@@ -63,7 +63,7 @@ const Registro = () => {
 
   const handleSignup = async () => {
     if (name && phone && email && password && confirmPassword && !phoneError && !emailError && !passwordError && !confirmPasswordError) {
-      const response = await fetch('http://api.agilenvio.co:2042/auth/singup', {
+      const response = await fetch('http://192.168.0.2:4488/auth/singup', {
         method: 'POST',
         body: JSON.stringify({ name, phone, email, password, confirmPassword }),
         headers: {
