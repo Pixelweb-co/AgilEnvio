@@ -222,7 +222,7 @@ export default function Requisition({ navigation, socket }) {
       <View style={{ height: 300 }}>
         <NavigationTabs
           store={requisition.reducers}
-          user={storedCredentials}
+          user={storedCredentials} 
           wizardAddstep={wizardAddstep}
           setWizardAddstep={() => {
             setWizardAddstep(wizardAddstep + 1);
