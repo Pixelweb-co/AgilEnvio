@@ -188,7 +188,7 @@ const setLocationDriver = (location)=>{
 
       console.log("Connect to socket ");
 
-      const socketConnection = io.connect("http://181.205.220.122:4488/socket", { 
+      const socketConnection = io.connect("http://192.168.0.2:4488/socket", { 
         query: {
           tipo: storedCredentials.tipo,
           cliente: storedCredentials._id,
