@@ -20,7 +20,7 @@ const NegotiateRequisitionClient = ({ requisition, driver,socket }) => {
 
   useEffect(() => {
     const checkLoginCredentials = () => {
-      AsyncStorage.getItem("flowerCribCredentials")
+      AsyncStorage.getItem("userCredentials")
         .then((result) => {
           if (result !== null) {
             setStoredCredentials(JSON.parse(result));

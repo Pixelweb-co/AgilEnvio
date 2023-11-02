@@ -3,7 +3,7 @@ import {Image, View, Text,StyleSheet,Dimensions,TouchableOpacity } from 'react-n
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import { useSelector,useDispatch } from 'react-redux';
 import {setRequisition,setOffers} from '../../../reducers/actions/RequsitionActions'
-
+import {GoogleKey, API_URL} from "@env";
 const TerminarServicioCliente = ({ requisition,user }) => {
   const dispatch = useDispatch();
   useEffect(()=>{
@@ -15,7 +15,7 @@ const TerminarServicioCliente = ({ requisition,user }) => {
 
 
     // Send login data to API endpoint
-    const endpoint = 'http://api.agilenvio.co:2042/api/rating/setrating';
+    const endpoint = API_URL+'/api/rating/setrating';
     
     fetch(endpoint, {
       method: 'POST',

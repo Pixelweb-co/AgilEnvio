@@ -31,7 +31,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CredentialsContext } from "../../CredentialsContext.jsx";
 import MapComponent from "../../maps/MapComponent";
 
-import {GoogleKey} from "@env";
+import {GoogleKey, API_URL} from "@env";
 
 
 export default function Requisition({ navigation, socket }) {
@@ -165,7 +165,7 @@ export default function Requisition({ navigation, socket }) {
 
   const registerRequisition = async () => {
     let storedCredentials;
-    await AsyncStorage.getItem("flowerCribCredentials")
+    await AsyncStorage.getItem("userCredentials")
       .then((result) => {
         if (result !== null) {
           //  console.log("result crede from ",result)
@@ -187,7 +187,7 @@ export default function Requisition({ navigation, socket }) {
           storedCredentials = null;
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log("Error get credentials requisition",error));
   
       
   

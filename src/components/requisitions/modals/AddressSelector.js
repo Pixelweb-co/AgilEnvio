@@ -11,9 +11,9 @@ import {
   StyleSheet,
 } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import FavoritesCard from "../UiModules/FavoritesCard";
-import AddAddressCard from "../UiModules/AddAddressCard";
-import {GoogleKey} from "@env";
+import FavoritesCard from "../../UiModules/FavoritesCard";
+import AddAddressCard from "../../UiModules/AddAddressCard";
+import {GoogleKey, API_URL} from "@env";
 
 import * as Location from "expo-location";
 import axios from "axios";
@@ -27,8 +27,8 @@ import {
 } from "../../../reducers/actions/RequsitionActions";
 
 import close from "../../../../assets/img/close.png";
-import MapPickerAddress from "../UiModules/MapPickAddress";
-import MapPickerCard from "../UiModules/MapPickerCard";
+import MapPickerAddress from "../../UiModules/MapPickAddress";
+import MapPickerCard from "../../UiModules/MapPickerCard";
 
 const AddressSelector = ({
   visible,
@@ -144,7 +144,7 @@ const AddressSelector = ({
      
       console.log("AppMode "+AppMode) 
       
-    const endpoint = "http://api.agilenvio.co:2042/api/solicitud/lastlocation";
+    const endpoint = API_URL+"/api/solicitud/lastlocation";
     console.log("user to last locations")  
   
     const postData = {
@@ -345,7 +345,7 @@ const AddressSelector = ({
     // Send load user from API endpoint
     
     console.log("api get fav")
-    const endpoint = "http://api.agilenvio.co:2042/api/favoritos/obtenerFavoritos"; 
+    const endpoint = API_URL+"/api/favoritos/obtenerFavoritos"; 
 
     const postData = {
       user: user._id
@@ -375,7 +375,7 @@ const AddressSelector = ({
     console.log("save ", optionSet);
 
     // Send load user from API endpoint
-    const endpoint = "http://api.agilenvio.co:2042/api/setfavorite";
+    const endpoint = API_URL+"/api/setfavorite";
 
     const postData = {
       user: user._id,

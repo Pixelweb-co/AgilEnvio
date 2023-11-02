@@ -5,7 +5,7 @@ import ServicesMenu from '../menu';
 import { NavigationContainer } from '@react-navigation/native';
 import NavigationTabs from '../../navigation/NavigationTabs';
 import { useSelector, useDispatch } from 'react-redux';
-import {GoogleKey} from "@env";
+import {GoogleKey, API_URL} from "@env";
 import { changeOrigin,addDestination,addLocation,openSheet,closeSheet,changeStatus,setRequisition } from '../../../reducers/actions/RequsitionActions';
 import DestinationsSheetModal from '../modals/DestinationsSheetModal';
 //import iconDestination from '../assets/img/markerMenu.png'
@@ -184,7 +184,7 @@ export default function Requisition({navigation }) {
  /*    (async ()=>{
       try {
         
-        const url = 'http://api.agilenvio.co:2042/api/solicitudes_user';
+        const url = API_URL+'/api/solicitudes_user';
         await axios
           .post(url,{status:"PENDING",id_client:storedCredentials._id})
           .then((response) => { 
@@ -266,7 +266,7 @@ export default function Requisition({navigation }) {
   const registerRequisition = async()=>{
     
     let storedCredentials
-    await AsyncStorage.getItem('flowerCribCredentials')
+    await AsyncStorage.getItem('userCredentials')
     .then((result) => {
        
       if (result !== null) {
@@ -278,9 +278,9 @@ export default function Requisition({navigation }) {
         storedCredentials = null;
       }
     })
-    .catch((error) => console.log(error));
+    .catch((error) => console.log("Error obteniendo credenciales en requisitionNw",error));
 
-    const url = 'http://api.agilenvio.co:2042/api/solicitudes';
+    const url = API_URL+'/api/solicitudes';
 
     const requisition_send = {...requisition.reducers.requisition,status:"PENDING",id_client:storedCredentials._id,client_data:storedCredentials}
 

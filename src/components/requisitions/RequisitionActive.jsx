@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from "react-native";
 
+import {GoogleKey, API_URL} from "@env";
 
 //reducers
 import {
@@ -177,7 +178,7 @@ export default function RequisitionActive({ requisition, offers, socket }) {
                         >
                           <Image
                             source={{
-                              uri: "http://api.agilenvio.co:2042/uploads/noPhoto.jpg",
+                              uri: API_URL+"/uploads/noPhoto.jpg",
                             }}
                             style={{ width: 50, height: 50, borderRadius: 25 }}
                           />

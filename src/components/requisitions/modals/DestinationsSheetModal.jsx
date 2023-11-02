@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import RBSheet from "react-native-raw-bottom-sheet";
-import DestinationsEdit from '../UiModules/DestinationsEdit';
+import DestinationsEdit from '../../UiModules/DestinationsEdit';
 
 import { useSelector,useDispatch } from 'react-redux';
 import { setOpenSheet } from '../../../reducers/actions/RequsitionActions';
