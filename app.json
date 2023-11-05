@@ -7,9 +7,17 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+    "image": "./assets/splash.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#ffffff",
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ]
+    ]
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -32,7 +40,7 @@
       "versionCode": 1,
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s"
+          "apiKey": "AIzaSyBd_WuqpaI8kCwCLMWgTpKZPar9TOX33Tk"
         }
         },
         "permissions": [

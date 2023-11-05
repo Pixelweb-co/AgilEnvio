@@ -9,6 +9,7 @@ import {
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import axios from "axios";
+import {GoogleKey, API_URL} from "@env";
 
 const MapPicker = ({pickAddress,close,visible}) => {
   const [location, setLocation] = useState(null);
@@ -39,7 +40,7 @@ const MapPicker = ({pickAddress,close,visible}) => {
       axios
         .get(url, {
           params: {
-            key: "AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s",
+            key: GoogleKey,
             latlng:
               coords.latitude.toString() + "," + coords.longitude.toString(),
           },
@@ -68,7 +69,7 @@ const MapPicker = ({pickAddress,close,visible}) => {
         })
         .catch((error) => {
           //          handleMessage('An error occurred. Check your network and try again');
-          console.log(error.toJSON());
+          console.log(error);
         });
     })();
     }
@@ -85,7 +86,7 @@ const MapPicker = ({pickAddress,close,visible}) => {
     axios
       .get(url, {
         params: {
-          key: "AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s",
+          key: GoogleKey,
           latlng:
             center.latitude.toString() + "," + center.longitude.toString(),
         },
@@ -116,7 +117,7 @@ const MapPicker = ({pickAddress,close,visible}) => {
       })
       .catch((error) => {
         //          handleMessage('An error occurred. Check your network and try again');
-        console.log(error.toJSON());
+        console.log(error);
       });
   };
 

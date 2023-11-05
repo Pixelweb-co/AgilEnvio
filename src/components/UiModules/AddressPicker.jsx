@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, FlatList, Text,Image,TouchableOpacity ,StyleSheet} from 'react-native';
+import { View, TextInput, FlatList, Text,Image,TouchableOpacity ,StyleSheet, SafeAreaView} from 'react-native';
+import {GoogleKey, API_URL} from "@env";
 
 const AddressPicker = ({setDirection}) => {
   const [searchText, setSearchText] = useState('');
@@ -7,14 +8,14 @@ const AddressPicker = ({setDirection}) => {
 
   const handleSearch = async (text) => {
     
-    //console.log(text)
+    console.log(text)
     setSearchText(text);
 
     if (text.length < 3) {
       return;
     }
 
-    const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&components=country:CO&types=address&key=AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s`;
+    const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&components=country:CO&types=address&key={GoogleKey}`;
 
     const response = await fetch(url);
     const data = await response.json();
@@ -31,7 +32,7 @@ const AddressPicker = ({setDirection}) => {
       
       <TouchableOpacity style={styles.result} onPress={()=>{
         
-        const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${item.place_id}&key=AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s`;
+        const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${item.place_id}&key={GoogleKey}`;
     fetch(detailsUrl)
       .then(response => response.json())
       .then(data => {
@@ -52,7 +53,7 @@ const AddressPicker = ({setDirection}) => {
         }}>
       
         <Image
-          source={require('../../../../assets/img/markerMenu.png')}
+          source={require('../../../assets/img/markerMenu.png')}
           style={styles.icon}
         />
          <Text style={styles.resultText} onChangeText={handleSearch} value={searchText}>{item.description}</Text>
@@ -63,18 +64,23 @@ const AddressPicker = ({setDirection}) => {
   };
 
   return (
-    <View>
+      <SafeAreaView>
+      
       <TextInput
         style={styles.input}
-        onChangeText={handleSearch}
+        onChangeText={(text)=>handleSearch(text)}
+        editable={true}
+        placeholder="Escribe una direccion"
         value={searchText}
+        autoFocus={true}
       />
       <FlatList
         data={results}
         keyExtractor={(item) => item.place_id}
         renderItem={renderItem}
       />
-    </View>
+      </SafeAreaView>
+    
   );
 };
 

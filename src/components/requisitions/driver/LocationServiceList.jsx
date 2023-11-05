@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Dimensions, FlatList, StyleSheet } from "react-native";
+import { View, Text, Dimensions, FlatList, StyleSheet, Image } from "react-native";
 
 import { TouchableOpacity } from "react-native";
 
 import { useSelector } from "react-redux";
 import * as Location from "expo-location";
 
+import { Gif } from 'react-native-gif';
 
 import { connect } from "react-redux";
 const { height } = Dimensions.get("window");
@@ -34,7 +35,8 @@ const LocationServiceList = ({ navigation,socket }) => {
     // );
 
    // getLocation();
-  }, []);
+   console.log("locatins__________>>>>>>>>>>>>><",locations)
+  }, [locations]);
 
   useEffect(() => {
     if (selectedRequisition !== null) {
@@ -79,8 +81,9 @@ const LocationServiceList = ({ navigation,socket }) => {
   const renderItem = (item) => {
    
     return (
-      <View style={styles.item}>
+      
         <TouchableOpacity
+          style={styles.item}
           onPress={() => {
             console.log("sitem ",item)
             setSelectedRequistion(item)}}
@@ -94,27 +97,47 @@ const LocationServiceList = ({ navigation,socket }) => {
             Valor: {item.tarifa.valor} Forma de pago: {item.tarifa.formaPago}
           </Text>
         </TouchableOpacity>
-      </View>
-    );
+          );
   };
 
   return (
     <View style={styles.container}>
-      <FlatList data={locations} renderItem={({ item }) => renderItem(item)} />
+      
+      {locations.length > 0 &&
+      <FlatList  data={locations} renderItem={({ item }) => renderItem(item)} />
+      }
+
+      {locations.length === 0 && 
+      <View style={{width:"100%",flex:.6,elevation:3,alignContent:"center",alignItems:"center",justifyContent:"center"}}>
+      <Image
+      source={require('../../../../assets/img/505cd4e70a299298bf92eae900a7d6e8.gif')}
+      style={{width: "90%", height: 300}}
+    />
+    <Text style={{marginTop:10,fontSize:18,fontWeight:"bold",color:"orange"}}>Esperando servicios...</Text>
     </View>
+      }
+      </View>
   );
 };
 
 const styles = new StyleSheet.create({
   container: {
-    with: "100%",
+    width:"100%",
+    alignContent:"center",
+    alignItems:"center",
     height: height,
   },
   item: {
-    width: "95%",
+    marginVertical:2,
+    paddingVertical:5,
+    borderWidth:1,
+    borderColor:"royalblue",
+    borderRadius:5,
+    elevation:3,
+    paddingHorizontal:15,
+    width: "100%",
     backgroundColor: "#FFFFFF",
     height: 100,
-    marginBottom: 2,
   },
   button: {
     paddingLeft: 2,

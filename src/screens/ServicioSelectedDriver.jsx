@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text,StyleSheet,TouchableOpacity,Dimensions } from 'react-native';
+import { View, Text,StyleSheet,TouchableOpacity,Dimensions, Alert } from 'react-native';
 import MapComponent from '../components/maps/MapComponent';
 import DestinationsRequisition from '../components/requisitions/DestinationsRequisition'
 import NegotiateRequisition from '../components/requisitions/driver/NegotiateRequisition';
@@ -17,7 +17,37 @@ export default function ServicioSelectedDriver(props) {
     const [socket,setSocket]=useState(null)
     const requisitionNegotiate = useSelector(state => state.reducers.requisitionNegotiate)
     const requisition = useSelector(state => state.reducers.requisition)
+    const requisitionList = useSelector(state => state.reducers.requisitionListPending)
 
+
+    useEffect(()=>{
+
+      if(requisitionList.length>0 && requsitionSl.status==="PENDING"){
+        const findR = requisitionList.find((r)=>r._id === props.route.params.requisition._id);
+   
+        console.log("cambio en la lista de solicitudes ",findR.tarifa.valor)
+
+      if(findR){
+
+        if(findR.tarifa.valor < props.route.params.requisition.tarifa.valor){
+          Alert,alert("El cliente ha disminuido la tarifa de este servicio")
+        }
+
+
+        if(findR.tarifa.valor > props.route.params.requisition.tarifa.valor){
+          Alert,alert("El cliente ha aumentado la tarifa de este servicio")
+        }
+
+        setRequisition(findR);
+
+      }else{
+        Alert.alert("Esta solicitud ya no esta disponible.")
+        props.route.params.navigationExt.navigate("Principal")
+      }
+
+    }
+
+    },[requisitionList])
 
     useEffect(()=>{
 
@@ -76,7 +106,7 @@ export default function ServicioSelectedDriver(props) {
      <View style={styles.container}>   
      <View style={styles.row}>
       <View style={styles.singleColumn}>
-      <TouchableOpacity style={styles.button} onPress={()=>(null)}>
+      <TouchableOpacity style={styles.button} onPress={()=>props.route.params.navigationExt.navigate("Principal")}>
           <Text style={styles.buttonText}>Volver al Listado</Text>
       </TouchableOpacity>
       </View>

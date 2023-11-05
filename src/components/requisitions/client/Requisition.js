@@ -31,6 +31,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CredentialsContext } from "../../CredentialsContext.jsx";
 import MapComponent from "../../maps/MapComponent";
 
+import {GoogleKey, API_URL} from "@env";
+
+
 export default function Requisition({ navigation, socket }) {
   const requisition = useSelector((store) => store);
   const stepNew = useSelector((store) => store.reducers.stepNew);
@@ -77,7 +80,7 @@ export default function Requisition({ navigation, socket }) {
     axios
       .get(url, {
         params: {
-          key: "AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s",
+          key: GoogleKey,
           latlng:
             origin.coords.latitude.toString() +
             "," +
@@ -106,7 +109,7 @@ export default function Requisition({ navigation, socket }) {
       })
       .catch((error) => {
         //          handleMessage('An error occurred. Check your network and try again');
-        console.log(error.toJSON());
+        console.log(error);
       });
   };
 
@@ -162,7 +165,7 @@ export default function Requisition({ navigation, socket }) {
 
   const registerRequisition = async () => {
     let storedCredentials;
-    await AsyncStorage.getItem("flowerCribCredentials")
+    await AsyncStorage.getItem("userCredentials")
       .then((result) => {
         if (result !== null) {
           //  console.log("result crede from ",result)
@@ -184,7 +187,7 @@ export default function Requisition({ navigation, socket }) {
           storedCredentials = null;
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log("Error get credentials requisition",error));
   
       
   
@@ -205,22 +208,21 @@ export default function Requisition({ navigation, socket }) {
 
   useEffect(() => {
      console.log("socker requisition new ")
+    
   }, [socket]);
 
   return (
     <View style={styles.container}>
-      {stepNew >= 0 &&
       <View style={styles.map}>
         <MapComponent type="viewNew" socket={socket} requisitionSelected={requisition.reducers.requisition}/>
       </View>
-      }
       <StatusBar style="auto" />
       {/* <ServicesMenu/> */}
       {/* <Text style={styles.paragraph}>{text}</Text> */}
       <View style={{ height: 300 }}>
         <NavigationTabs
           store={requisition.reducers}
-          user={storedCredentials}
+          user={storedCredentials} 
           wizardAddstep={wizardAddstep}
           setWizardAddstep={() => {
             setWizardAddstep(wizardAddstep + 1);

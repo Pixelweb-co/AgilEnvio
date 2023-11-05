@@ -10,7 +10,7 @@ const FavoritesCard = ({ user,closeFavorities }) => {
    
     const fetchFavorites = async () => {
         console.log("obteniendo lista de favoritos")
-        const response = await fetch(`http://api.agilenvio.co:2432/api/getfavoritos?user=${user._id}`);
+        const response = await fetch(`http://localhost:2432/api/getfavoritos?user=${user._id}`);
       const data = await response.json();
       setFavorites(data);
     };

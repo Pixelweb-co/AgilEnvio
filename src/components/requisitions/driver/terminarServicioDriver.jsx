@@ -3,7 +3,7 @@ import {Image, View, Text,StyleSheet,Dimensions,TouchableOpacity } from 'react-n
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import { useSelector,useDispatch } from 'react-redux';
 import {setRequisition,setOffers} from '../../../reducers/actions/RequsitionActions'
-
+import {GoogleKey, API_URL} from "@env";
 const TerminarServicioDriver = ({ requisition,user }) => {
   
   const dispatch = useDispatch(); 
@@ -18,7 +18,7 @@ const TerminarServicioDriver = ({ requisition,user }) => {
 
 
     // Send login data to API endpoint
-    const endpoint = 'http://api.agilenvio.co:2042/api/rating/setrating';
+    const endpoint = API_URL+'/api/rating/setrating';
     
     fetch(endpoint, {
       method: 'POST',
@@ -73,7 +73,7 @@ const TerminarServicioDriver = ({ requisition,user }) => {
               
       <Image
         source={{
-          uri: "http://api.agilenvio.co:2042/uploads/noPhoto.jpg",
+          uri: API_URL+"/uploads/noPhoto.jpg",
         }}
         style={{ width: 75, height: 75, borderRadius: 25 }}
       />

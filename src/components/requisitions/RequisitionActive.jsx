@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from "react-native";
 
+import {GoogleKey, API_URL} from "@env";
 
 //reducers
 import {
@@ -33,6 +34,7 @@ import NegotiateRequisitionClient from "./client/NegotiateRequisitionClient";
 import { useSelector,useDispatch } from "react-redux";
 import RequisitionList from "./driver/RequisitionList";
 import UserBox from "../acounts/UserBox";
+import OffersList from "./client/OffersList";
 
 var { height } = Dimensions.get("window");
 var box_count = 3;
@@ -61,98 +63,19 @@ export default function RequisitionActive({ requisition, offers, socket }) {
 
   const AcceptRequisition = async (offer) => {
     //console.log("accept ", offer);
-    socket.emit("aceptar_solicitud_driver_oferta",offer)
+    socket.emit("aceptar_solicitud_driver_oferta",{oferta:offer,solicitud:requsitionSl})
 
   }
-
-  const AcceptRequisition2 = async (offer) => {
-    //console.log("accept ", offer);
-
-    const url = "http://api.agilenvio.co:2042/api/aceptar_solicitud";
-
-      // aceptar solicitud to API endpoint
-      const endpoint = url;
-      const data = {
-        offer: offer,
-      };
-      fetch(endpoint, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-      //  console.log("Result solicitud ", data);
-        if (data.result === "SUCCESS") {
-
-          console.log("from backend active sol ",data)
-          //alert("chg ",data.solicitud.status)
-//          requisitionActiveNow(data.solicitud,data.offer)
-        }
-
-      })
-      .catch(error => console.error(error));
-  };
 
 
   const terminateRequisition = async () => {
 
     console.log("terminando servicio")
-    socket.emit("terminar_soliitud",requisition)
+    socket.emit("terminar_solicitud",requisition)
 
   }
 
-  const terminateRequisition2 = async()=>{
 
-
-    const url = 'http://api.agilenvio.co:2042/api/terminar_solicitud';
-        
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({
-        requisition:requisition
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log("Result solicitud ",data)
-      if(data.result === "SUCCESS"){
-        requisitionActiveNow({
-          id:null,
-          id_client:null,
-          client_data:null,
-          id_driver:null,
-          origin:{title:"initial",coords:null},
-          destinations:[],
-          status:"NEW",
-          tarifa:{valor:0,formaPago:"efectivo"},
-          type:null,
-          comments:{notes:"",serviceTypeOptions:null}
-        }) 
-
-        Alert.alert(
-          "Ha termiado su servicio",
-          "Gracias por preferrirnos",
-          [
-            {
-              text: "Cerrar",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel"
-            }
-          ]
-        );
-
-    }})
-    .catch(error => console.error(error));
-
-
-
-  }
 
   const showFinishDialog = () => {
     return Alert.alert(
@@ -181,14 +104,14 @@ export default function RequisitionActive({ requisition, offers, socket }) {
       {requsitionSl !== null && (
         <>
           <View style={{ height: height }}>
-            <View style={{ backgroundColor: "blue", flex: 0.8,padding:((height / 70)) }}>
+            <View style={{ backgroundColor: "blue", flex: 0.5,padding:((height / 70)) }}>
               <Text style={{color:"white"}}>
                 Con el fin de brindar seguridad , este servicio sera rastreado
                 por GPS y su ubicación sera confidencial. Solo revelará por una
                 orden judicial.
               </Text>
             </View>
-            <View style={{ backgroundColor: "#7CA1B4", flex: 5.5 }}>
+            <View style={{ flex: 5.5 }}>
               <MapComponent
                 type="viewDriver"
                 requisitionSelected={requsitionSl}
@@ -219,15 +142,21 @@ export default function RequisitionActive({ requisition, offers, socket }) {
                 <View
                   style={{
                     padding: 10,
-                    marginRight: 5,
-                    marginLeft: 5,
-                    backgroundColor: "rgba(255, 255, 255, 0.5)",
+                    marginRight: 0,
+                    marginLeft: "5%",
+                   
                     position: "absolute",
                     top: 80,
-                    width: "97%",
+                    width: "90%",
                     minHeight: 50,
                   }}
                 >
+
+                 
+
+              <OffersList offersList={offersStore} onSelect={(item)=>AcceptRequisition(item)}/>
+
+{/* 
                   {offersStore.map((item, index) => {
                   //  console.log("ofc ", item);
                     return (
@@ -240,7 +169,6 @@ export default function RequisitionActive({ requisition, offers, socket }) {
                           paddingBottom: 10,
                         }}
                       >
-                        {/* Columna izquierda */}
                         <View
                           style={{
                             flex: 1,
@@ -250,15 +178,13 @@ export default function RequisitionActive({ requisition, offers, socket }) {
                         >
                           <Image
                             source={{
-                              uri: "http://api.agilenvio.co:2042/uploads/noPhoto.jpg",
+                              uri: API_URL+"/uploads/noPhoto.jpg",
                             }}
                             style={{ width: 50, height: 50, borderRadius: 25 }}
                           />
                         </View>
 
-                        {/* Columna central */}
                         <View style={{ flex: 3 }}>
-                          {/* Fila 1 */}
                           <View
                             style={{
                               flexDirection: "row",
@@ -269,7 +195,6 @@ export default function RequisitionActive({ requisition, offers, socket }) {
                             <Text>{item.contratista_name}</Text>
                           </View>
 
-                          {/* Fila 2 */}
                           <View
                             style={{
                               flexDirection: "row",
@@ -283,7 +208,6 @@ export default function RequisitionActive({ requisition, offers, socket }) {
                           </View>
                         </View>
 
-                        {/* Columna derecha */}
                         <View
                           style={{
                             flex: 1,
@@ -307,7 +231,7 @@ export default function RequisitionActive({ requisition, offers, socket }) {
                         </View>
                       </View>
                     );
-                  })}
+                  })} */}
                 </View>
               )}
             </View>

@@ -2,7 +2,7 @@ import React, { useState,useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 import { CredentialsContext } from '../components/CredentialsContext';
-
+import {GoogleKey, API_URL} from "@env";
 // Async storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -38,9 +38,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
     };
   
       // Persisting login
-  const persistLogin = (credentials, message, status) => {
+  const persistLogin = (credentials, message, status,accessToken) => {
     console.log("user login ",credentials)
-    AsyncStorage.setItem('flowerCribCredentials', JSON.stringify(credentials))
+    AsyncStorage.setItem('userCredentials', JSON.stringify(credentials))
+    AsyncStorage.setItem('authToken', JSON.stringify(accessToken))
       .then(() => {
         //handleMessage(message, status);
         setStoredCredentials(credentials);
@@ -57,8 +58,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
       }
   
       // Send login data to API endpoint
-      const endpoint = 'http://api.agilenvio.co:2042/auth/login';
+      const endpoint = API_URL+'/accounts/auth/login';
       const data = { email, password };
+
+      
       fetch(endpoint, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -69,23 +72,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
       .then(response => response.json())
       .then(data => {
 
-        console.log("data usl ",data)
-        if (data.message === 'Logued Ok') {
           // Navigate to Home screen if login is successful
-        const { status, message,token,user } = data;
+        const { result, message,accessToken,user } = data;
         console.log("user resl ",user)
-        if (status !== 'SUCCESS') {
-         // handleMessage(message, status);
+        if (result !== 'SUCCESS') {
+         // handleMessage(message, result);
+         setEmailError('Credenciales inválidas');
+         setPasswordError('Credenciales inválidas');
+      
         } else {
-          persistLogin({ ...user }, message, status);
+          persistLogin({ ...user }, message, result, accessToken);
         }
         
-        } else {
-          setEmailError('Credenciales inválidas');
-          setPasswordError('Credenciales inválidas');
-        }
       })
-      .catch(error => console.error(error));
+      .catch(error => console.error("Error en la conexion con el servicio: ",error));
     };
   
     return (
@@ -105,7 +105,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
           onChangeText={handlePasswordChange}
           secureTextEntry
         />
+      
         {passwordError ? <Text style={styles.errorMessage}>{passwordError}</Text> : null}
+      
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Ingresar</Text>
         </TouchableOpacity>

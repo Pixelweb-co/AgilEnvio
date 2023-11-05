@@ -5,7 +5,7 @@ import ServicesMenu from '../menu';
 import { NavigationContainer } from '@react-navigation/native';
 import NavigationTabs from '../../navigation/NavigationTabs';
 import { useSelector, useDispatch } from 'react-redux';
-
+import {GoogleKey, API_URL} from "@env";
 import { changeOrigin,addDestination,addLocation,openSheet,closeSheet,changeStatus,setRequisition } from '../../../reducers/actions/RequsitionActions';
 import DestinationsSheetModal from '../modals/DestinationsSheetModal';
 //import iconDestination from '../assets/img/markerMenu.png'
@@ -65,7 +65,7 @@ export default function Requisition({navigation }) {
       
       const url = 'https://maps.googleapis.com/maps/api/geocode/json?';
         axios
-          .get(url, {params:{ key: "AIzaSyDzQmRckek8ujCnLrYo_s35o0heMSPkY7s",latlng:origin.coords.latitude.toString()+','+origin.coords.longitude.toString() }})
+          .get(url, {params:{ key: GoogleKey,latlng:origin.coords.latitude.toString()+','+origin.coords.longitude.toString() }})
           .then((response) => {
             const result = response;
             setLocation(origin);
@@ -77,7 +77,7 @@ export default function Requisition({navigation }) {
           })
           .catch((error) => {
   //          handleMessage('An error occurred. Check your network and try again');
-            console.log(error.toJSON());
+            console.log(error);
           });
       };
       
@@ -184,7 +184,7 @@ export default function Requisition({navigation }) {
  /*    (async ()=>{
       try {
         
-        const url = 'http://api.agilenvio.co:2042/api/solicitudes_user';
+        const url = API_URL+'/api/solicitudes_user';
         await axios
           .post(url,{status:"PENDING",id_client:storedCredentials._id})
           .then((response) => { 
@@ -266,7 +266,7 @@ export default function Requisition({navigation }) {
   const registerRequisition = async()=>{
     
     let storedCredentials
-    await AsyncStorage.getItem('flowerCribCredentials')
+    await AsyncStorage.getItem('userCredentials')
     .then((result) => {
        
       if (result !== null) {
@@ -278,7 +278,7 @@ export default function Requisition({navigation }) {
         storedCredentials = null;
       }
     })
-    .catch((error) => console.log(error));
+    .catch((error) => console.log("Error obteniendo credenciales en requisitionNw",error));
 
     const url = 'http://api.agilenvio.co:2042/api/solicitudes';
 
