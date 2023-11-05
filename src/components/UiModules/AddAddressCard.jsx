@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import AddressPicker from './AddressPicker';
+import AddressPicker from '../UiModules/AddressPicker';
 
 
 

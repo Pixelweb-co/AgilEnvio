@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, FlatList, Text,Image,TouchableOpacity ,StyleSheet, SafeAreaView} from 'react-native';
-import {GoogleKey} from "@env";
+import {GoogleKey, API_URL} from "@env";
 
 const AddressPicker = ({setDirection}) => {
   const [searchText, setSearchText] = useState('');
@@ -53,7 +53,7 @@ const AddressPicker = ({setDirection}) => {
         }}>
       
         <Image
-          source={require('../../../../assets/img/markerMenu.png')}
+          source={require('../../../assets/img/markerMenu.png')}
           style={styles.icon}
         />
          <Text style={styles.resultText} onChangeText={handleSearch} value={searchText}>{item.description}</Text>

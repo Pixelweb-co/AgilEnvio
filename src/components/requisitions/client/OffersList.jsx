@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {Image,TouchableOpacity,Text, FlatList, StyleSheet, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-
+import {GoogleKey, API_URL} from "@env";
 
 
 const ITEM_HEIGHT = 50; // Altura fija de cada elemento
@@ -44,7 +44,7 @@ const OffersList = ({offersList,onSelect}) => {
         >
           <Image
             source={{
-              uri: "http://192.168.0.2:4488/uploads/noPhoto.jpg",
+              uri: API_URL+"/uploads/noPhoto.jpg",
             }}
             style={{ elevation:3,width: 55, height: 55, borderRadius: 25 }}
           />

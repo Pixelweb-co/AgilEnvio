@@ -4,7 +4,7 @@ import DragList, { DragListRenderItemInfo } from "react-native-draglist";
 
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { setRequisition } from "../../../reducers/actions/RequsitionActions";
+import { setRequisition } from "../../reducers/actions/RequsitionActions";
 
 import { useDispatch, useSelector } from "react-redux";
 

@@ -11,9 +11,11 @@ import {
   View,
   Text,  
   Dimensions,
-  FlatList
+  FlatList,
+  Image
 } from 'react-native';
 import ServiceCash from './ServiceCash';
+import PanelConductor from '../../UiModules/PanelConductor';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -31,6 +33,8 @@ function MyTabs({navigationExt,socket}) {
       </Tab.Screen>  
 
       <Tab.Screen name='Lista'>
+      
+      
       {()=><LocationServiceList navigation={navigationExt} socket={socket}/>}
 
       </Tab.Screen>
@@ -59,14 +63,14 @@ const RequisitionList =({socket,store,navigation})=> {
 
     return (
       <View style={{height:height}}>
-      <View style={{ backgroundColor: "#7cb48f", flex: 1 }} >
-        <Text>Header</Text>
+      <View style={{ backgroundColor: "white", flex: 1 }} >
+        <Text>kerlin</Text>
       </View>
-      <View style={{ backgroundColor: "#7CA1B4",flex:10 }} >
+      <View style={{ backgroundColor: "#CCC",flex:15 }} >
         <MyTabs navigationExt={navigation} socket={socket}/>
       </View>
-      <View style={{ backgroundColor: "#FFFFFF",flex:5 }} >
-        <Text><ServiceCash/></Text>
+      <View style={{ backgroundColor: "royalblue",flex:5 }} >
+        <PanelConductor/>
       </View>
     </View>
         )

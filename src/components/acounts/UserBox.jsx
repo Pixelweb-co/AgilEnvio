@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text,Image } from 'react-native';
 import { useSelector } from 'react-redux';
 import {AntDesign} from '@expo/vector-icons';
+import {GoogleKey, API_URL} from "@env";
 
 
 export default function UserBox({requisition}) {
@@ -25,30 +26,19 @@ export default function UserBox({requisition}) {
 
 
 // Send load user from API endpoint
-      const endpoint = 'http://192.168.0.2:4488/api';
-      
-      
+            
       const userId = postData.user_id; // Aquí debes insertar el ID del usuario que deseas obtener
        console.log("user get ",postData.user_id)
-      fetch(`${endpoint}/usuarios/${userId}`)
-        .then(response => { 
-         // console.log("Res user from back ",response) 
-          if (!response.ok) {
-            throw new Error('Error al obtener el usuario ',response.status); 
-          }
-          return response.json(); 
-        }) 
-        .then(usuario => {
-          //console.log("user from back", usuario);
-          setUserData(usuario)
-        })
-        .catch(error => {
-          console.error(error);
-        });
+           
       
-
-
-
+       axios.post(API_URL+'/accounts/getuser',{user_id:userId}).then((response) => {
+        console.log("from users " , response.data)
+        
+        setUserData(response.data)
+    
+        }).catch(e=>console.log("error get user ",e))
+      
+      
     }
 
     if(requisition.id_client && requisition.id_driver){
@@ -85,7 +75,7 @@ export default function UserBox({requisition}) {
     >
       <Image
         source={{
-          uri: "http://192.168.0.2:4488/uploads/noPhoto.jpg",
+          uri: !userData.avatar ? API_URL+"/files/noPhoto.jpg" : `${API_URL}/files/${userData._id}/300x300-${userData.avatar}.jpg`,
         }}
         style={{ width: 50, height: 50, borderRadius: 25 }}
       />

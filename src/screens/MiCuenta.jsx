@@ -7,11 +7,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 function MiCuenta(props) {
     const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
     const clearLogin = () => {
-        AsyncStorage.removeItem('flowerCribCredentials')
+        AsyncStorage.removeItem('userCredentials')
           .then(() => {
             setStoredCredentials("");
           })
-          .catch((error) => console.log(error));
+          .catch((error) => console.log("Error get credentials mi cuenta",error));
       };
 
     return (

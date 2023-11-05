@@ -9,7 +9,7 @@ import {
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import axios from "axios";
-import {GoogleKey} from "@env";
+import {GoogleKey, API_URL} from "@env";
 
 const MapPicker = ({pickAddress,close,visible}) => {
   const [location, setLocation] = useState(null);
