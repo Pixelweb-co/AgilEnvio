@@ -228,7 +228,7 @@ await  AsyncStorage.getItem("userCredentials")
           user_local = JSON.parse(result);
           console.log("storedCredentials ",user_local._id)
       
-    axios.post('http://192.168.0.2:4488/accounts/getuser',{user_id:user_local._id}).then((response) => {
+    axios.post(API_URL+'/accounts/getuser',{user_id:user_local._id}).then((response) => {
     console.log("from users " , response.data)
     
 

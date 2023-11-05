@@ -28,7 +28,6 @@
     "expo-face-detector": "~12.0.0",
     "expo-location": "^15.0.1",
     "expo-status-bar": "^1.4.2",
-    "i": "^0.3.7",
     "npm": "^9.6.2",
     "react": "18.1.0",
     "react-native": "0.70.5",

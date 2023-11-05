@@ -2,23 +2,32 @@ import React from 'react';
 import {Text, StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
 import PocketList from './pockets/PocketList';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import WalletNavigationFloat from './navigation/WalletNavigationFloat';
 
 
 const { height } = Dimensions.get('window');
 
 const bolsillos = [
     {
-        id:"334dc",    
+    id:"334dc",    
+    type:"general",
+    title:"General",
+    saldo:55000
+    },{
+        id:"334dc",
+        type:"pocket",    
         title:"Ahorro",
         saldo:10000
     },
     {
-        id:"345",    
+        id:"345",
+        type:"pocket",    
         title:"Vacaciones",
         saldo:8000
     },
     {
-        id:"33a44d",    
+        id:"33a44d",
+        type:"pocket",    
         title:"Agilenvio",
         saldo:25000
     }
@@ -26,6 +35,8 @@ const bolsillos = [
 
 
 const Wallet = () => {
+  var saldoG = bolsillos.find(e=>e.type=='general');
+  console.log("saldo g ",saldoG.saldo)
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -37,7 +48,7 @@ const Wallet = () => {
         <View style={{alignContent:"center",alignItems:"center"}}>
             
             <View style={{alignContent:"center",alignItems:"center",marginTop:60, backgroundColor:"#FFFFFF",padding:20,width:"80%",elevation:3,borderRadius:10}}>
-                <Text style={{fontSize:36, fontWeight:"bold"}}>$ 000.000</Text>    
+                <Text style={{fontSize:36, fontWeight:"bold"}}>$ {saldoG.saldo}</Text>    
 
             </View> 
         </View>  
@@ -101,6 +112,7 @@ const Wallet = () => {
               </TouchableOpacity>
             </View>
         </View>
+     
         </View>
       </View>
     </View>
